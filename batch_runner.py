@@ -43,9 +43,9 @@ def run_single_problem(problem_path: str, worker_id: int) -> Tuple[str, bool, st
         elif "❌ FAIL" in output:
             message = f"FAILED validation in {elapsed:.1f}s"
         else:
-            message = f"ERROR: {result.stderr[:100] if result.stderr else 'Unknown error'}"
+            message = f"ERROR: {result.stderr[:80] if result.stderr else 'Unknown error'}"
             print("Unkown error: dumping stdout")
-            print(result.stdout[500:])
+            print(result.stdout[:3000])
             success = False
             
         print(f"[Worker {worker_id}] Completed {problem_name}: {message}")

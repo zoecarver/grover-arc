@@ -287,11 +287,15 @@ def save_sample_images(grid_input: List[List[int]], grid_output: Optional[List[L
         expected_filename = f"{sample_type}_expected_{index}_{file_suffix}.png"
         save_grid_image(grid_expected, log_dir, expected_filename)
 
-    # Save output prediction if available
+    # Save output prediction if available - this may fail if program generated invalid grid
     if grid_output is not None:
-        file_suffix = get_next_file_suffix(log_dir)
-        output_filename = f"{sample_type}_prediction_{index}_{file_suffix}.png"
-        save_grid_image(grid_output, log_dir, output_filename)
+        try:
+            file_suffix = get_next_file_suffix(log_dir)
+            output_filename = f"{sample_type}_prediction_{index}_{file_suffix}.png"
+            save_grid_image(grid_output, log_dir, output_filename)
+        except Exception as e:
+            log_execution_step(log_dir, "Image Save Error",
+                             f"Failed to save output image for {sample_type} {index}: {str(e)}")
 
 
 def execute_dsl_on_problem(dsl_program: str, problem_path: str, log_dir: str) -> ProblemExecutionResult:

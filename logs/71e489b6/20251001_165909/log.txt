@@ -1,0 +1,1288 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 16:59:09] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 17x19
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 1 - Output
+Size: 17x19
+[1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 16x16
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 2 - Output
+Size: 16x16
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 7, 0, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 0, 7, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 1, 7, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 7, 7]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 16x16
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Training Example 3 - Output
+Size: 16x16
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 0, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 0, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 16x16
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 19x18
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
+[2025-10-01 17:07:32] Response:
+```python
+from typing import List, Tuple, Dict
+import collections
+
+def get_4_neighbors(cleaned: List[List[int]], i: int, j: int, rows: int, cols: int) -> Tuple[int, Dict[Tuple[int, int], Tuple[int, int, int]]]:
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    neigh_types: Dict[Tuple[int, int], Tuple[int, int, int]] = {}
+    count1 = 0
+    for di, dj in dirs:
+        ni, nj = i + di, j + dj
+        if 0 <= ni < rows and 0 <= nj < cols:
+            val = cleaned[ni][nj]
+            neigh_types[(di, dj)] = (ni, nj, val)
+            if val == 1:
+                count1 += 1
+        else:
+            neigh_types[(di, dj)] = None
+    return count1, neigh_types
+
+def set_8_adj_1s_to_7(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, rows: int, cols: int):
+    for ddi in [-1, 0, 1]:
+        for ddj in [-1, 0, 1]:
+            if ddi == 0 and ddj == 0:
+                continue
+            ni = i + ddi
+            nj = j + ddj
+            if 0 <= ni < rows and 0 <= nj < cols and cleaned[ni][nj] == 1:
+                new_g[ni][nj] = 7
+
+def handle_enclosed_hole(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, rows: int, cols: int):
+    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+
+def handle_bridge(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, open_dj: int, rows: int, cols: int):
+    if open_dj == 1:  # open right
+        end_j = j + 1
+        while end_j < cols and cleaned[i][end_j] == 0:
+            end_j += 1
+        left_c = j - 1
+        gap_start = j
+        gap_end = end_j - 1
+        right_c = end_j if end_j < cols and cleaned[i][end_j] == 1 else end_j
+        fill_start = left_c
+        fill_end = right_c + 1 if end_j < cols and cleaned[i][end_j] == 1 else end_j
+        # current row
+        for c in range(max(0, fill_start), min(cols, fill_end)):
+            new_g[i][c] = 7
+        # above
+        if i > 0:
+            for c in range(max(0, fill_start), min(cols, fill_end)):
+                if cleaned[i - 1][c] == 1:
+                    new_g[i - 1][c] = 7
+        # below
+        if i < rows - 1:
+            if 0 <= left_c < cols and cleaned[i + 1][left_c] == 1:
+                new_g[i + 1][left_c] = 7
+            if 0 <= right_c < cols and cleaned[i + 1][right_c] == 1:
+                new_g[i + 1][right_c] = 7
+            for c in range(gap_start, gap_end + 1):
+                if 0 <= c < cols:
+                    new_g[i + 1][c] = 0
+    elif open_dj == -1:  # open left
+        start_j = j - 1
+        while start_j >= 0 and cleaned[i][start_j] == 0:
+            start_j -= 1
+        start_j += 1
+        right_c = j + 1
+        gap_start = start_j
+        gap_end = j
+        left_c = start_j - 1
+        if left_c >= 0 and cleaned[i][left_c] == 1:
+            fill_start = left_c
+        else:
+            fill_start = start_j
+        fill_end = right_c + 1 if right_c < cols and cleaned[i][right_c] == 1 else right_c
+        # current row
+        for c in range(max(0, fill_start), min(cols, fill_end)):
+            new_g[i][c] = 7
+        # above
+        if i > 0:
+            for c in range(max(0, fill_start), min(cols, fill_end)):
+                if cleaned[i - 1][c] == 1:
+                    new_g[i - 1][c] = 7
+        # below
+        if i < rows - 1:
+            if 0 <= left_c < cols and cleaned[i + 1][left_c] == 1:
+                new_g[i + 1][left_c] = 7
+            if 0 <= right_c < cols and cleaned[i + 1][right_c] == 1:
+                new_g[i + 1][right_c] = 7
+            for c in range(gap_start, gap_end + 1):
+                if 0 <= c < cols:
+                    new_g[i + 1][c] = 0
+
+def handle_dent_vertical(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, open_di: int, rows: int, cols: int):
+    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+    dir_i = i + open_di
+    if 0 <= dir_i < rows:
+        for dc in [-1, 0, 1]:
+            nc = j + dc
+            if 0 <= nc < cols and cleaned[dir_i][nc] == 0:
+                new_g[dir_i][nc] = 7
+
+def remove_isolated_1s(g: List[List[int]]) -> List[List[int]]:
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    new_g = [row[:] for row in g]
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    for i in range(rows):
+        for j in range(cols):
+            if g[i][j] == 1:
+                has_neigh = False
+                for di, dj in dirs:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < rows and 0 <= nj < cols and g[ni][nj] == 1:
+                        has_neigh = True
+                        break
+                if not has_neigh:
+                    new_g[i][j] = 0
+    return new_g
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    cleaned = remove_isolated_1s(g)
+    new_g = [row[:] for row in cleaned]
+    for i in range(rows):
+        for j in range(cols):
+            if cleaned[i][j] != 0:
+                continue
+            count1, neigh_types = get_4_neighbors(cleaned, i, j, rows, cols)
+            if count1 == 4:
+                handle_enclosed_hole(cleaned, new_g, i, j, rows, cols)
+            elif count1 == 3:
+                # find open dir
+                open_dir = None
+                for (di, dj), info in neigh_types.items():
+                    if info is None or info[2] != 1:
+                        open_dir = (di, dj, info)
+                        break
+                if open_dir is None:
+                    continue
+                open_di, open_dj, open_info = open_dir
+                is_horizontal_open = abs(open_dj) == 1
+                up_1 = neigh_types.get((-1, 0), None) is not None and neigh_types[(-1, 0)][2] == 1
+                down_1 = neigh_types.get((1, 0), None) is not None and neigh_types[(1, 0)][2] == 1
+                if is_horizontal_open and up_1 and down_1:
+                    # bridge
+                    if open_dj == 1 and j > 0 and cleaned[i][j - 1] == 1:
+                        handle_bridge(cleaned, new_g, i, j, open_dj, rows, cols)
+                    elif open_dj == -1 and j < cols - 1 and cleaned[i][j + 1] == 1:
+                        handle_bridge(cleaned, new_g, i, j, open_dj, rows, cols)
+                    else:
+                        set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+                elif open_di == 1 and open_info is not None and open_info[2] == 0:
+                    handle_dent_vertical(cleaned, new_g, i, j, open_di, rows, cols)
+                elif open_di == -1 and open_info is not None and open_info[2] == 0:
+                    handle_dent_vertical(cleaned, new_g, i, j, open_di, rows, cols)
+                else:
+                    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+            elif count1 == 2 and (i == 0 or i == rows - 1 or j == 0 or j == cols - 1):
+                set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+    return new_g
+```
+
+
+============================================================
+=== Program Saved ===
+[2025-10-01 17:07:32] Python program saved to: logs/71e489b6/20251001_165909/generated_program_170732.py
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:07:32] Executing on input grid:
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:07:32] Generated output grid:
+[1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1]
+
+
+============================================================
+=== Training 0 Comparison ===
+[2025-10-01 17:07:32] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:07:32] Executing on input grid:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:07:32] Generated output grid:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 7, 0, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 0, 7, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 1, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 7, 0]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
+============================================================
+=== Training 1 Comparison ===
+[2025-10-01 17:07:32] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:07:32] Executing on input grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:07:32] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 0, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 0, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+============================================================
+=== Training 2 Comparison ===
+[2025-10-01 17:07:32] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:07:32] Executing on input grid:
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:07:32] Generated output grid:
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 0, 0]
+[1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 7, 7, 0, 7, 7, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 7, 0, 7, 7, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+============================================================
+=== Execution Summary ===
+[2025-10-01 17:07:32] All training matches: False
+Test matches: False
+
+
+============================================================
+=== Stage DSL Extrapolate) ===
+[2025-10-01 17:07:33] Prompt:
+We are working on a visual puzzle. Your task is to summarize the last submission, talk about what worked, and what didn't in an effort to find the correct solution.
+
+You previously generated the following program which generated the following outputs:
+Program:
+```python
+from typing import List, Tuple, Dict
+import collections
+
+def get_4_neighbors(cleaned: List[List[int]], i: int, j: int, rows: int, cols: int) -> Tuple[int, Dict[Tuple[int, int], Tuple[int, int, int]]]:
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    neigh_types: Dict[Tuple[int, int], Tuple[int, int, int]] = {}
+    count1 = 0
+    for di, dj in dirs:
+        ni, nj = i + di, j + dj
+        if 0 <= ni < rows and 0 <= nj < cols:
+            val = cleaned[ni][nj]
+            neigh_types[(di, dj)] = (ni, nj, val)
+            if val == 1:
+                count1 += 1
+        else:
+            neigh_types[(di, dj)] = None
+    return count1, neigh_types
+
+def set_8_adj_1s_to_7(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, rows: int, cols: int):
+    for ddi in [-1, 0, 1]:
+        for ddj in [-1, 0, 1]:
+            if ddi == 0 and ddj == 0:
+                continue
+            ni = i + ddi
+            nj = j + ddj
+            if 0 <= ni < rows and 0 <= nj < cols and cleaned[ni][nj] == 1:
+                new_g[ni][nj] = 7
+
+def handle_enclosed_hole(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, rows: int, cols: int):
+    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+
+def handle_bridge(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, open_dj: int, rows: int, cols: int):
+    if open_dj == 1:  # open right
+        end_j = j + 1
+        while end_j < cols and cleaned[i][end_j] == 0:
+            end_j += 1
+        left_c = j - 1
+        gap_start = j
+        gap_end = end_j - 1
+        right_c = end_j if end_j < cols and cleaned[i][end_j] == 1 else end_j
+        fill_start = left_c
+        fill_end = right_c + 1 if end_j < cols and cleaned[i][end_j] == 1 else end_j
+        # current row
+        for c in range(max(0, fill_start), min(cols, fill_end)):
+            new_g[i][c] = 7
+        # above
+        if i > 0:
+            for c in range(max(0, fill_start), min(cols, fill_end)):
+                if cleaned[i - 1][c] == 1:
+                    new_g[i - 1][c] = 7
+        # below
+        if i < rows - 1:
+            if 0 <= left_c < cols and cleaned[i + 1][left_c] == 1:
+                new_g[i + 1][left_c] = 7
+            if 0 <= right_c < cols and cleaned[i + 1][right_c] == 1:
+                new_g[i + 1][right_c] = 7
+            for c in range(gap_start, gap_end + 1):
+                if 0 <= c < cols:
+                    new_g[i + 1][c] = 0
+    elif open_dj == -1:  # open left
+        start_j = j - 1
+        while start_j >= 0 and cleaned[i][start_j] == 0:
+            start_j -= 1
+        start_j += 1
+        right_c = j + 1
+        gap_start = start_j
+        gap_end = j
+        left_c = start_j - 1
+        if left_c >= 0 and cleaned[i][left_c] == 1:
+            fill_start = left_c
+        else:
+            fill_start = start_j
+        fill_end = right_c + 1 if right_c < cols and cleaned[i][right_c] == 1 else right_c
+        # current row
+        for c in range(max(0, fill_start), min(cols, fill_end)):
+            new_g[i][c] = 7
+        # above
+        if i > 0:
+            for c in range(max(0, fill_start), min(cols, fill_end)):
+                if cleaned[i - 1][c] == 1:
+                    new_g[i - 1][c] = 7
+        # below
+        if i < rows - 1:
+            if 0 <= left_c < cols and cleaned[i + 1][left_c] == 1:
+                new_g[i + 1][left_c] = 7
+            if 0 <= right_c < cols and cleaned[i + 1][right_c] == 1:
+                new_g[i + 1][right_c] = 7
+            for c in range(gap_start, gap_end + 1):
+                if 0 <= c < cols:
+                    new_g[i + 1][c] = 0
+
+def handle_dent_vertical(cleaned: List[List[int]], new_g: List[List[int]], i: int, j: int, open_di: int, rows: int, cols: int):
+    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+    dir_i = i + open_di
+    if 0 <= dir_i < rows:
+        for dc in [-1, 0, 1]:
+            nc = j + dc
+            if 0 <= nc < cols and cleaned[dir_i][nc] == 0:
+                new_g[dir_i][nc] = 7
+
+def remove_isolated_1s(g: List[List[int]]) -> List[List[int]]:
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    new_g = [row[:] for row in g]
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    for i in range(rows):
+        for j in range(cols):
+            if g[i][j] == 1:
+                has_neigh = False
+                for di, dj in dirs:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < rows and 0 <= nj < cols and g[ni][nj] == 1:
+                        has_neigh = True
+                        break
+                if not has_neigh:
+                    new_g[i][j] = 0
+    return new_g
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    cleaned = remove_isolated_1s(g)
+    new_g = [row[:] for row in cleaned]
+    for i in range(rows):
+        for j in range(cols):
+            if cleaned[i][j] != 0:
+                continue
+            count1, neigh_types = get_4_neighbors(cleaned, i, j, rows, cols)
+            if count1 == 4:
+                handle_enclosed_hole(cleaned, new_g, i, j, rows, cols)
+            elif count1 == 3:
+                # find open dir
+                open_dir = None
+                for (di, dj), info in neigh_types.items():
+                    if info is None or info[2] != 1:
+                        open_dir = (di, dj, info)
+                        break
+                if open_dir is None:
+                    continue
+                open_di, open_dj, open_info = open_dir
+                is_horizontal_open = abs(open_dj) == 1
+                up_1 = neigh_types.get((-1, 0), None) is not None and neigh_types[(-1, 0)][2] == 1
+                down_1 = neigh_types.get((1, 0), None) is not None and neigh_types[(1, 0)][2] == 1
+                if is_horizontal_open and up_1 and down_1:
+                    # bridge
+                    if open_dj == 1 and j > 0 and cleaned[i][j - 1] == 1:
+                        handle_bridge(cleaned, new_g, i, j, open_dj, rows, cols)
+                    elif open_dj == -1 and j < cols - 1 and cleaned[i][j + 1] == 1:
+                        handle_bridge(cleaned, new_g, i, j, open_dj, rows, cols)
+                    else:
+                        set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+                elif open_di == 1 and open_info is not None and open_info[2] == 0:
+                    handle_dent_vertical(cleaned, new_g, i, j, open_di, rows, cols)
+                elif open_di == -1 and open_info is not None and open_info[2] == 0:
+                    handle_dent_vertical(cleaned, new_g, i, j, open_di, rows, cols)
+                else:
+                    set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+            elif count1 == 2 and (i == 0 or i == rows - 1 or j == 0 or j == cols - 1):
+                set_8_adj_1s_to_7(cleaned, new_g, i, j, rows, cols)
+    return new_g
+```
+
+Training example 1 result: INCORRECT
+Generated:
+[1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1]
+Expected:
+[1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1]
+
+Training example 2 result: INCORRECT
+Generated:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 7, 0, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 0, 7, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 1, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 7, 0]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Expected:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 7, 0, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 0, 7, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 1, 7, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 7, 7]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training example 3 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 0, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 0, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Expected:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 0, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 0, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Test input generated output:
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 0, 0]
+[1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 7, 7, 0, 7, 7, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 7, 0, 7, 7, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 7, 7, 7, 1, 0, 0]
+[1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    **Think** about the correct output for the test input. Mentally run the puzzle rules and considerations over the test input grid and think about what the output should be and if the generated output matches. If it does not match, think about how best to update the program to handle the test input.
+    
+
+YOUR TASK: summarize the above attempts, summarize what worked, and what did not work. Summarize the problem as you understand it. Call out the high level puzzle rules as well as subtle elements of the puzzle that are easy to miss. Include all considerations across all attempts. Include helpful functions from attempts, such as functions to extract objects. 
+
+IMPORTANT: Be specific and list the observe effects (what was generated) and how they are different from what you expected. It's okay to say you don't know why something is different, but make sure to note that it IS different.
+
+You can include unhelpful functions, so that we don't use them in future attempts. Make sure to make it clear when a function is either broken or not helpful to the problem.
+
+IMPORTANT: look at the generated test outputs. The generated test outputs are the MOST IMPORTANT. Do the test outputs make sense? Do they look correct? If they do not look correct, explain why they are not correct.
+
+IMPORTANT: grade this attempt at the end. You must match the grading format EXACTLY: "MARK ATTEMPT GRADE: 10/10". 
+
+Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood OR some training samples pass. Only give a high score (above 7/10) if core principles are demonstrated AND some training samples pass.
+
+OUTPUT FORMAT: Below is an example of what you should output. Make sure to include every section. Follow this format exactly.
+
+============= EXAMPLE OUTPUT =============
+**High level:** this is a puzzle that... (one-two sentences)
+
+**Details, subtleties, key considerations:**
+ * Omit objects that...
+ * Make sure you match....
+ * And so on...
+
+**Helpful functions, types, and tools:**
+```python
+class PuzzleElement:
+    def __init__(self):
+        self.hole_count = ...
+```
+
+```python
+def extract_objects(g: List[List[int]]) -> PuzzleElement:
+    return ...
+```
+
+**Previous attempts:**
+ * Missed ommission of objects with hole count not in key
+ * Consider problems where key component does not stretch across the entire grid
+ * Missed X
+ * extract_objects is essential for Y
+ * Train 1 omitted the devider bar
+ * Train 1 mismatches blob shape for unkown reason (it's okay to say it's unknown)
+ * Function `extract_objects` is incorrect or not relevant to the puzzle (don't use it in the future)
+
+**Test output:**
+ * The test output does not look correct in any attempt
+ * The test output is missing X and Y
+ * Make sure to account for keys with ... to handle test case
+
+ MARK ATTEMPT GRADE: X/10
+
+
+[2025-10-01 17:08:34] Response:
+**High level:** This is a visual puzzle involving binary grids (0s for empty space, 1s for shape elements) where the goal is to process connected components of 1s by filling certain 0s with 7s (likely to complete or "solidify" internal voids, bridges, or dents in shapes) and sometimes modifying adjacent 1s to 7s, while removing isolated 1s. The output transforms the input to highlight or complete puzzle shapes, possibly for object recognition or topology correction, with 7s representing filled/completed areas.
+
+**Details, subtleties, key considerations:**
+ * Enclosed holes (0 cells fully surrounded by 4 orthogonal 1s) should trigger filling or marking of adjacent 1s or the hole itself, but the current logic marks adjacent 1s to 7 without filling the 0, which may not match expectations where the hole might stay 0 or get filled differently.
+ * Bridges (0 cells with exactly 3 orthogonal 1 neighbors, open horizontally, and vertical neighbors as 1s) need gap-filling across rows (current row, above, and selectively below), but the logic overfills or underfills below rows (e.g., setting some to 0 incorrectly) and assumes specific left/right openness without robust gap detection.
+ * Dents or vertical openings (count1==3 with vertical open direction into another 0) require filling the dent and adjacent 0s in the open direction, but current handling is limited to 3-column wide fills and doesn't propagate vertically.
+ * Edge cases: 0 cells on borders with count1==2 should be treated as potential fills (current logic sets adjacent 1s to 7), but this may over-apply.
+ * Isolated 1s (no orthogonal 1 neighbors) are correctly removed to 0 at the start, which works but may interact poorly with later fills.
+ * Subtle topology: Fills should not propagate outside shapes or create new enclosures; horizontal bridges need symmetric left/right handling, but current code has asymmetric gap calculation (e.g., fill_end logic differs). Vertical dents may need bidirectional checks. No diagonal considerations in neighbor counts, but 8-adj fills are used selectively. Order of processing (iterating all 0s after isolation removal) may cause missed updates if fills create new 0/1 patterns. Grids have varying sizes (e.g., 17x17? in ex1, 16x16 in others), with empty rows/columns that should remain 0.
+ * General: 7s seem to "complete" shapes (e.g., filling bays or holes), but not all 1s become 7s—only boundaries or internals. No flooding or connected component labeling, leading to local decisions that fail global shape consistency.
+
+**Helpful functions, types, and tools:**
+```python
+from typing import List, Tuple, Dict
+
+def get_4_neighbors(cleaned: List[List[int]], i: int, j: int, rows: int, cols: int) -> Tuple[int, Dict[Tuple[int, int], Tuple[int, int, int]]]:
+    # Counts orthogonal 1 neighbors and maps directions to (ni, nj, val); useful for local topology checks like enclosures or bridges.
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    neigh_types: Dict[Tuple[int, int], Tuple[int, int, int]] = {}
+    count1 = 0
+    for di, dj in dirs:
+        ni, nj = i + di, j + dj
+        if 0 <= ni < rows and 0 <= nj < cols:
+            val = cleaned[ni][nj]
+            neigh_types[(di, dj)] = (ni, nj, val)
+            if val == 1:
+                count1 += 1
+        else:
+            neigh_types[(di, dj)] = None
+    return count1, neigh_types
+```
+
+```python
+def remove_isolated_1s(g: List[List[int]]) -> List[List[int]]:
+    # Correctly identifies and removes standalone 1s (no orthogonal 1 neighbors), preventing noise in shapes; essential preprocessing.
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    new_g = [row[:] for row in g]
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    for i in range(rows):
+        for j in range(cols):
+            if g[i][j] == 1:
+                has_neigh = any(0 <= i + di < rows and 0 <= j + dj < cols and g[i + di][j + dj] == 1 for di, dj in dirs)
+                if not has_neigh:
+                    new_g[i][j] = 0
+    return new_g
+```
+
+**Unhelpful or broken functions (avoid in future):**
+- `set_8_adj_1s_to_7`: Marks only existing 1s in 8 directions to 7, but doesn't fill 0s (e.g., the hole itself), leading to incomplete shapes; broken for enclosures where the 0 should perhaps become 7.
+- `handle_bridge`: Asymmetric left/right gap detection and overfills below row (sets gaps to 0, which may erase parts); fill logic doesn't always connect properly (e.g., end_j calculation assumes immediate 1, but gaps may vary).
+- `handle_dent_vertical`: Fills only 3 adjacent 0s in open direction, too narrow for wider dents; doesn't check for chain of 0s vertically.
+- `handle_enclosed_hole`: Just calls set_8_adj_1s_to_7, which doesn't fill the 0 hole—likely incorrect as expectations show some 0s remaining but boundaries marked.
+
+**Previous attempts:**
+ * All three training examples failed, indicating core logic flaws in fill detection and propagation.
+ * Train 1: Generated extra 7s in row2 col16-17 (7,7 vs expected 7,0? wait, row2: generated [...,1,7,7] vs expected [...,1,7,0]—mismatch at col16=7 vs 0); row3 col16=7 vs expected7 (ok); row12 col5-6=7,0 vs expected 0,0 (overfill); row13 all 1s ok but prior mismatches. Bridge/dent handling over-marked vertical extensions.
+ * Train 2: Mismatches in row8 col15=7 vs expected0 (overfill in bridge?); row9 col15=7 vs0; row13 col5-8=7,0,0,7 vs expected7,0,0,7 (ok but row14 swapped to 7,7,7,7 vs 0,0,7? wait no, generated row13= [1,1,1,1,1,7,0,0,7,...] vs expected [1,1,1,1,1,7,7,7,7,...]—underfill in row13 cols6-8=0,0 vs7,7; row14= [1,1,1,1,1,7,7,7,7,...] vs expected [1,1,1,1,1,7,0,0,7,...]—swapped fills. Bridge below-row logic incorrect, setting too many to 0.
+ * Train 3: Generated extra isolated 1 in row3 col6=1 vs expected0 (isolation removal failed?); row12 col6-8=7,7,7 vs expected7,7,7 (ok); but row4 col4=1 vs expected0? Wait, input likely had it, but expected removes more. Underfilled vertical dents, leaving some 1s unconnected.
+ * Overall: Local 0-cell checks miss global shape context (no component extraction); bridge fills don't symmetric or propagate correctly; dent/bridge confusion leads to over/under-fills. No handling for multi-row gaps or diagonal influences. Isolation removal works but applied too early without re-checking after fills.
+
+**Test output:**
+ * The generated test output does not look correct—it overfills with 7s in irregular patterns (e.g., row3 cols10-12=7,7,7 but input suggests a horizontal bridge or dent starting there, yet expected likely fills only the gap without extending to row2/4 fully; row5 col4-6=7,7,0 vs probable expected 7,0,7 or similar for dent). It creates disconnected 7 blobs (e.g., row11 col5=7 isolated?) and underfills edges (row12 col8=7 but col9-16=0s where shape may need bridging). Fills don't align with shape topology—e.g., left side looks like a vertical wall with dents, but output scatters 7s without completing bays. Missing symmetric vertical fills and over-applies edge rule (count1==2 on borders). To handle test, need better gap propagation across multiple rows/columns and component-based filling instead of per-0 decisions.
+
+MARK ATTEMPT GRADE: 4/10
+
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 17:08:34] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+=== Attempt ===
+**High level:** This is a visual puzzle involving binary grids (0s for empty space, 1s for shape elements) where the goal is to process connected components of 1s by filling certain 0s with 7s (likely to complete or "solidify" internal voids, bridges, or dents in shapes) and sometimes modifying adjacent 1s to 7s, while removing isolated 1s. The output transforms the input to highlight or complete puzzle shapes, possibly for object recognition or topology correction, with 7s representing filled/completed areas.
+
+**Details, subtleties, key considerations:**
+ * Enclosed holes (0 cells fully surrounded by 4 orthogonal 1s) should trigger filling or marking of adjacent 1s or the hole itself, but the current logic marks adjacent 1s to 7 without filling the 0, which may not match expectations where the hole might stay 0 or get filled differently.
+ * Bridges (0 cells with exactly 3 orthogonal 1 neighbors, open horizontally, and vertical neighbors as 1s) need gap-filling across rows (current row, above, and selectively below), but the logic overfills or underfills below rows (e.g., setting some to 0 incorrectly) and assumes specific left/right openness without robust gap detection.
+ * Dents or vertical openings (count1==3 with vertical open direction into another 0) require filling the dent and adjacent 0s in the open direction, but current handling is limited to 3-column wide fills and doesn't propagate vertically.
+ * Edge cases: 0 cells on borders with count1==2 should be treated as potential fills (current logic sets adjacent 1s to 7), but this may over-apply.
+ * Isolated 1s (no orthogonal 1 neighbors) are correctly removed to 0 at the start, which works but may interact poorly with later fills.
+ * Subtle topology: Fills should not propagate outside shapes or create new enclosures; horizontal bridges need symmetric left/right handling, but current code has asymmetric gap calculation (e.g., fill_end logic differs). Vertical dents may need bidirectional checks. No diagonal considerations in neighbor counts, but 8-adj fills are used selectively. Order of processing (iterating all 0s after isolation removal) may cause missed updates if fills create new 0/1 patterns. Grids have varying sizes (e.g., 17x17? in ex1, 16x16 in others), with empty rows/columns that should remain 0.
+ * General: 7s seem to "complete" shapes (e.g., filling bays or holes), but not all 1s become 7s—only boundaries or internals. No flooding or connected component labeling, leading to local decisions that fail global shape consistency.
+
+**Helpful functions, types, and tools:**
+```python
+from typing import List, Tuple, Dict
+
+def get_4_neighbors(cleaned: List[List[int]], i: int, j: int, rows: int, cols: int) -> Tuple[int, Dict[Tuple[int, int], Tuple[int, int, int]]]:
+    # Counts orthogonal 1 neighbors and maps directions to (ni, nj, val); useful for local topology checks like enclosures or bridges.
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    neigh_types: Dict[Tuple[int, int], Tuple[int, int, int]] = {}
+    count1 = 0
+    for di, dj in dirs:
+        ni, nj = i + di, j + dj
+        if 0 <= ni < rows and 0 <= nj < cols:
+            val = cleaned[ni][nj]
+            neigh_types[(di, dj)] = (ni, nj, val)
+            if val == 1:
+                count1 += 1
+        else:
+            neigh_types[(di, dj)] = None
+    return count1, neigh_types
+```
+
+```python
+def remove_isolated_1s(g: List[List[int]]) -> List[List[int]]:
+    # Correctly identifies and removes standalone 1s (no orthogonal 1 neighbors), preventing noise in shapes; essential preprocessing.
+    if not g or not g[0]:
+        return g
+    rows = len(g)
+    cols = len(g[0])
+    new_g = [row[:] for row in g]
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    for i in range(rows):
+        for j in range(cols):
+            if g[i][j] == 1:
+                has_neigh = any(0 <= i + di < rows and 0 <= j + dj < cols and g[i + di][j + dj] == 1 for di, dj in dirs)
+                if not has_neigh:
+                    new_g[i][j] = 0
+    return new_g
+```
+
+**Unhelpful or broken functions (avoid in future):**
+- `set_8_adj_1s_to_7`: Marks only existing 1s in 8 directions to 7, but doesn't fill 0s (e.g., the hole itself), leading to incomplete shapes; broken for enclosures where the 0 should perhaps become 7.
+- `handle_bridge`: Asymmetric left/right gap detection and overfills below row (sets gaps to 0, which may erase parts); fill logic doesn't always connect properly (e.g., end_j calculation assumes immediate 1, but gaps may vary).
+- `handle_dent_vertical`: Fills only 3 adjacent 0s in open direction, too narrow for wider dents; doesn't check for chain of 0s vertically.
+- `handle_enclosed_hole`: Just calls set_8_adj_1s_to_7, which doesn't fill the 0 hole—likely incorrect as expectations show some 0s remaining but boundaries marked.
+
+**Previous attempts:**
+ * All three training examples failed, indicating core logic flaws in fill detection and propagation.
+ * Train 1: Generated extra 7s in row2 col16-17 (7,7 vs expected 7,0? wait, row2: generated [...,1,7,7] vs expected [...,1,7,0]—mismatch at col16=7 vs 0); row3 col16=7 vs expected7 (ok); row12 col5-6=7,0 vs expected 0,0 (overfill); row13 all 1s ok but prior mismatches. Bridge/dent handling over-marked vertical extensions.
+ * Train 2: Mismatches in row8 col15=7 vs expected0 (overfill in bridge?); row9 col15=7 vs0; row13 col5-8=7,0,0,7 vs expected7,0,0,7 (ok but row14 swapped to 7,7,7,7 vs 0,0,7? wait no, generated row13= [1,1,1,1,1,7,0,0,7,...] vs expected [1,1,1,1,1,7,7,7,7,...]—underfill in row13 cols6-8=0,0 vs7,7; row14= [1,1,1,1,1,7,7,7,7,...] vs expected [1,1,1,1,1,7,0,0,7,...]—swapped fills. Bridge below-row logic incorrect, setting too many to 0.
+ * Train 3: Generated extra isolated 1 in row3 col6=1 vs expected0 (isolation removal failed?); row12 col6-8=7,7,7 vs expected7,7,7 (ok); but row4 col4=1 vs expected0? Wait, input likely had it, but expected removes more. Underfilled vertical dents, leaving some 1s unconnected.
+ * Overall: Local 0-cell checks miss global shape context (no component extraction); bridge fills don't symmetric or propagate correctly; dent/bridge confusion leads to over/under-fills. No handling for multi-row gaps or diagonal influences. Isolation removal works but applied too early without re-checking after fills.
+
+**Test output:**
+ * The generated test output does not look correct—it overfills with 7s in irregular patterns (e.g., row3 cols10-12=7,7,7 but input suggests a horizontal bridge or dent starting there, yet expected likely fills only the gap without extending to row2/4 fully; row5 col4-6=7,7,0 vs probable expected 7,0,7 or similar for dent). It creates disconnected 7 blobs (e.g., row11 col5=7 isolated?) and underfills edges (row12 col8=7 but col9-16=0s where shape may need bridging). Fills don't align with shape topology—e.g., left side looks like a vertical wall with dents, but output scatters 7s without completing bays. Missing symmetric vertical fills and over-applies edge rule (count1==2 on borders). To handle test, need better gap propagation across multiple rows/columns and component-based filling instead of per-0 decisions.
+
+MARK ATTEMPT GRADE: 4/10
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 17x19
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 1 - Output
+Size: 17x19
+[1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0, 7, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 16x16
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 2 - Output
+Size: 16x16
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 7]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 7, 0, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 0, 7, 1, 1, 0, 7, 7, 7]
+[1, 1, 0, 0, 0, 0, 1, 7, 7, 7, 1, 1, 0, 1, 7, 0]
+[1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 7, 7]
+[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 16x16
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Training Example 3 - Output
+Size: 16x16
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 0, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 7, 7, 0, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 7, 7, 7, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 7, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 1, 1, 7, 0, 7, 1, 1, 1, 1, 1, 0, 0]
+[0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Colors present:
+  1 = blue
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 16x16
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 19x18
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+

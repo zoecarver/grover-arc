@@ -1,0 +1,594 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 13:02:28] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 8x20
+[0, 2, 2, 2, 2, 2, 2, 2]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 4, 4, 8, 9, 9, 8]
+[1, 8, 4, 4, 8, 9, 9, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 1, 6, 8, 4, 4, 8]
+[1, 8, 2, 6, 8, 4, 4, 8]
+[1, 8, 6, 6, 8, 8, 8, 8]
+[1, 8, 6, 6, 8, 8, 8, 8]
+[1, 8, 6, 6, 8, 4, 7, 8]
+[1, 8, 6, 6, 8, 7, 4, 8]
+[1, 8, 8, 8, 8, 7, 7, 8]
+[1, 8, 8, 8, 8, 7, 7, 8]
+[1, 8, 3, 6, 8, 7, 7, 8]
+[1, 8, 3, 6, 8, 7, 7, 8]
+[1, 8, 3, 3, 8, 8, 8, 8]
+[1, 8, 3, 3, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+
+Training Example 1 - Output
+Size: 6x12
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[6, 6, 6, 6, 6, 6]
+[1, 2, 6, 6, 6, 6]
+[8, 6, 6, 3, 3, 8]
+[8, 3, 3, 3, 3, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[7, 4, 7, 7, 7, 7]
+[4, 7, 7, 7, 7, 7]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 11x8
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8]
+[2, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 6, 6, 8, 8, 9, 9, 8, 8, 8]
+[2, 8, 6, 6, 8, 8, 9, 9, 8, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+
+Training Example 2 - Output
+Size: 4x8
+[8, 3, 3, 8]
+[8, 3, 3, 8]
+[4, 4, 4, 4]
+[4, 4, 4, 4]
+[8, 6, 6, 8]
+[8, 6, 6, 8]
+[8, 9, 9, 8]
+[8, 9, 9, 8]
+
+Colors present:
+  3 = green
+  4 = yellow
+  6 = pink
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 28x8
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 9, 9, 8, 8, 7, 7, 7, 7, 8, 8, 4, 4, 4, 4, 8, 8]
+[2, 8, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 9, 9, 8, 8, 7, 7, 7, 7, 8, 8, 4, 4, 4, 4, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 9, 9, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 8, 8, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 9, 9, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 8, 8, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+
+Training Example 3 - Output
+Size: 8x14
+[3, 3, 3, 3, 3, 3, 3, 3]
+[3, 3, 3, 3, 3, 3, 3, 3]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 7, 7, 7, 7, 8, 8]
+[8, 8, 7, 7, 7, 7, 8, 8]
+[8, 8, 4, 4, 4, 4, 8, 8]
+[8, 8, 4, 4, 4, 4, 8, 8]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[6, 6, 6, 6, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6]
+[8, 8, 8, 4, 4, 8, 8, 8]
+[8, 8, 8, 4, 4, 8, 8, 8]
+
+Colors present:
+  3 = green
+  4 = yellow
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 4 - Input
+Size: 23x8
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+[8, 3, 3, 3, 3, 3, 3, 8, 8, 7, 7, 8, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8, 2]
+[8, 3, 3, 3, 3, 3, 3, 8, 8, 7, 7, 8, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8, 2]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+[8, 8, 8, 8, 8, 3, 3, 3, 3, 8, 8, 6, 6, 6, 6, 6, 6, 8, 8, 9, 9, 8, 2]
+[8, 8, 8, 8, 8, 3, 3, 3, 3, 8, 8, 6, 6, 6, 6, 6, 6, 8, 8, 9, 9, 8, 2]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+
+Training Example 4 - Output
+Size: 6x14
+[8, 4, 4, 4, 4, 8]
+[8, 4, 4, 4, 4, 8]
+[8, 8, 3, 3, 8, 8]
+[8, 8, 3, 3, 8, 8]
+[8, 8, 7, 7, 8, 8]
+[8, 8, 7, 7, 8, 8]
+[3, 3, 3, 3, 3, 3]
+[3, 3, 3, 3, 3, 3]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 9, 9, 8, 8]
+[6, 6, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6]
+[8, 3, 3, 3, 3, 8]
+[8, 3, 3, 3, 3, 8]
+
+Colors present:
+  3 = green
+  4 = yellow
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 8x28
+[2, 2, 2, 2, 2, 2, 2, 0]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 4, 4, 8, 1]
+[8, 3, 3, 8, 4, 4, 8, 1]
+[8, 3, 3, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 6, 3, 8, 1]
+[8, 3, 7, 8, 6, 3, 8, 1]
+[8, 7, 3, 8, 3, 3, 8, 1]
+[8, 7, 3, 8, 3, 3, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 5, 5, 8, 6, 6, 8, 1]
+[8, 5, 5, 8, 6, 6, 8, 1]
+[8, 8, 8, 8, 6, 6, 8, 1]
+[8, 8, 8, 8, 6, 6, 8, 1]
+[8, 7, 7, 8, 6, 6, 8, 1]
+[8, 7, 9, 8, 6, 6, 8, 1]
+[8, 9, 7, 8, 8, 8, 8, 1]
+[8, 7, 7, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 9, 9, 8, 1]
+[8, 8, 8, 8, 9, 9, 8, 1]
+[8, 9, 9, 8, 8, 8, 8, 1]
+[8, 9, 9, 8, 8, 8, 8, 1]
+[8, 9, 9, 8, 4, 4, 8, 1]
+[8, 9, 9, 8, 4, 4, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
+[2025-10-01 13:18:49] Response:
+```python
+from typing import List
+from collections import defaultdict
+
+def get_max_run(grid: List[List[int]], start_c: int, end_c: int, n_rows: int, cols: int) -> int:
+    max_r = 0
+    # horizontal runs
+    for r in range(n_rows):
+        c = start_c
+        while c <= end_c:
+            if grid[r][c] == 8 or grid[r][c] == 0:
+                c += 1
+                continue
+            colr = grid[r][c]
+            lenh = 1
+            c += 1
+            while c <= end_c and grid[r][c] == colr:
+                lenh += 1
+                c += 1
+            max_r = max(max_r, lenh)
+    # vertical runs
+    for c in range(start_c, end_c + 1):
+        r = 0
+        while r < n_rows:
+            if grid[r][c] == 8 or grid[r][c] == 0:
+                r += 1
+                continue
+            colr = grid[r][c]
+            lenv = 1
+            r += 1
+            while r < n_rows and grid[r][c] == colr:
+                lenv += 1
+                r += 1
+            max_r = max(max_r, lenv)
+    return max_r
+
+def find_maximal_rects(grid: List[List[int]], start_c: int, end_c: int, n_rows: int, cols: int) -> List[tuple]:
+    rects = []
+    for rs in range(n_rows):
+        for re in range(rs + 1, n_rows + 1):
+            for cs in range(start_c, end_c + 1):
+                for ce in range(cs + 1, end_c + 2):
+                    # check all non-8 and non-0
+                    all_non = True
+                    for i in range(rs, re):
+                        for j in range(cs, ce):
+                            if grid[i][j] == 8 or grid[i][j] == 0:
+                                all_non = False
+                                break
+                        if not all_non:
+                            break
+                    if not all_non:
+                        continue
+                    # check maximality
+                    maxm = True
+                    # up
+                    if rs > 0:
+                        can = True
+                        for j in range(cs, ce):
+                            if grid[rs - 1][j] == 8 or grid[rs - 1][j] == 0:
+                                can = False
+                                break
+                        if can:
+                            maxm = False
+                    # down
+                    if re < n_rows:
+                        can = True
+                        for j in range(cs, ce):
+                            if grid[re][j] == 8 or grid[re][j] == 0:
+                                can = False
+                                break
+                        if can:
+                            maxm = False
+                    # left
+                    if cs > start_c:
+                        can = True
+                        for i in range(rs, re):
+                            if grid[i][cs - 1] == 8 or grid[i][cs - 1] == 0:
+                                can = False
+                                break
+                        if can:
+                            maxm = False
+                    # right
+                    if ce <= end_c:
+                        can = True
+                        for i in range(rs, re):
+                            if grid[i][ce] == 8 or grid[i][ce] == 0:
+                                can = False
+                                break
+                        if can:
+                            maxm = False
+                    if maxm:
+                        matrix = [[grid[i][j] for j in range(cs, ce)] for i in range(rs, re)]
+                        rects.append((rs, matrix, cs, ce))
+    return rects
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g:
+        return []
+    cols = len(g[0])
+    grid = g[1:]
+    n_rows = len(grid)
+    if n_rows == 0:
+        return []
+    # borders
+    left_col = [row[0] for row in grid]
+    right_col = [row[cols - 1] for row in grid]
+    left_uni = len(set(left_col)) == 1 and left_col[0] != 8
+    right_uni = len(set(right_col)) == 1 and right_col[0] != 8
+    direction_left = not right_uni
+    start_c = 1 if left_uni else 0
+    end_c = cols - 2 if right_uni else cols - 1
+    # max_run
+    pad_width = get_max_run(grid, start_c, end_c, n_rows, cols)
+    if pad_width == 0:
+        return []
+    # find rects
+    rects = find_maximal_rects(grid, start_c, end_c, n_rows, cols)
+    # lanes
+    lanes = defaultdict(list)
+    for rs, matrix, cs, ce in rects:
+        lanes[(cs, ce)].append((rs, matrix))
+    lane_keys = list(lanes.keys())
+    lane_keys.sort(key=lambda k: k[0], reverse=not direction_left)
+    output = []
+    for key in lane_keys:
+        lane_shapes = lanes[key]
+        lane_shapes.sort(key=lambda x: x[0])
+        for rs, matrix in lane_shapes:
+            h = len(matrix)
+            if h == 0:
+                continue
+            w = len(matrix[0])
+            if h > w:
+                trans = [[matrix[i][j] for i in range(h)] for j in range(w)]
+                trans = trans[::-1]
+                rendered = []
+                for tr in trans:
+                    extra = pad_width - len(tr)
+                    lp = extra // 2
+                    rp = extra - lp
+                    prow = [8] * lp + tr + [8] * rp
+                    rendered.append(prow)
+            else:
+                rendered = []
+                for roww in matrix:
+                    extra = pad_width - len(roww)
+                    lp = extra // 2
+                    rp = extra - lp
+                    prow = [8] * lp + roww + [8] * rp
+                    rendered.append(prow)
+            # ensure at least 2 rows by repeating last
+            while len(rendered) < 2:
+                if rendered:
+                    rendered.append(rendered[-1])
+                else:
+                    rendered.append([8] * pad_width)
+            output.extend(rendered)
+    return output
+```
+
+
+============================================================
+=== Program Saved ===
+[2025-10-01 13:18:49] Python program saved to: logs/291dc1e1/20251001_130228/generated_program_131849.py
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 13:18:49] Executing on input grid:
+[0, 2, 2, 2, 2, 2, 2, 2]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 4, 4, 8, 9, 9, 8]
+[1, 8, 4, 4, 8, 9, 9, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 1, 6, 8, 4, 4, 8]
+[1, 8, 2, 6, 8, 4, 4, 8]
+[1, 8, 6, 6, 8, 8, 8, 8]
+[1, 8, 6, 6, 8, 8, 8, 8]
+[1, 8, 6, 6, 8, 4, 7, 8]
+[1, 8, 6, 6, 8, 7, 4, 8]
+[1, 8, 8, 8, 8, 7, 7, 8]
+[1, 8, 8, 8, 8, 7, 7, 8]
+[1, 8, 3, 6, 8, 7, 7, 8]
+[1, 8, 3, 6, 8, 7, 7, 8]
+[1, 8, 3, 3, 8, 8, 8, 8]
+[1, 8, 3, 3, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+[1, 8, 8, 8, 8, 8, 8, 8]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 13:18:49] Generated output grid:
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[6, 6, 6, 6, 6, 6]
+[1, 2, 6, 6, 6, 6]
+[8, 6, 6, 3, 3, 8]
+[8, 3, 3, 3, 3, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[7, 4, 7, 7, 7, 7]
+[4, 7, 7, 7, 7, 7]
+
+
+============================================================
+=== Training 0 Comparison ===
+[2025-10-01 13:18:49] Matches expected: True
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 13:18:49] Executing on input grid:
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8]
+[2, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 6, 6, 8, 8, 9, 9, 8, 8, 8]
+[2, 8, 6, 6, 8, 8, 9, 9, 8, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 13:18:49] Generated output grid:
+[8, 3, 3, 8]
+[8, 3, 3, 8]
+[8, 6, 6, 8]
+[8, 6, 6, 8]
+[4, 4, 4, 4]
+[4, 4, 4, 4]
+[8, 9, 9, 8]
+[8, 9, 9, 8]
+
+
+============================================================
+=== Training 1 Comparison ===
+[2025-10-01 13:18:49] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 13:18:49] Executing on input grid:
+[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 9, 9, 8, 8, 7, 7, 7, 7, 8, 8, 4, 4, 4, 4, 8, 8]
+[2, 8, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 9, 9, 8, 8, 7, 7, 7, 7, 8, 8, 4, 4, 4, 4, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 9, 9, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 8, 8, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 9, 9, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 8, 8, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+[2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 13:18:49] Generated output grid:
+[3, 3, 3, 3, 3, 3, 3, 3]
+[3, 3, 3, 3, 3, 3, 3, 3]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[6, 6, 6, 6, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 8, 9, 9, 8, 8, 8]
+[8, 8, 7, 7, 7, 7, 8, 8]
+[8, 8, 7, 7, 7, 7, 8, 8]
+[8, 8, 8, 4, 4, 8, 8, 8]
+[8, 8, 8, 4, 4, 8, 8, 8]
+[8, 8, 4, 4, 4, 4, 8, 8]
+[8, 8, 4, 4, 4, 4, 8, 8]
+
+
+============================================================
+=== Training 2 Comparison ===
+[2025-10-01 13:18:49] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 13:18:49] Executing on input grid:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+[8, 3, 3, 3, 3, 3, 3, 8, 8, 7, 7, 8, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8, 2]
+[8, 3, 3, 3, 3, 3, 3, 8, 8, 7, 7, 8, 8, 3, 3, 8, 8, 4, 4, 4, 4, 8, 2]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+[8, 8, 8, 8, 8, 3, 3, 3, 3, 8, 8, 6, 6, 6, 6, 6, 6, 8, 8, 9, 9, 8, 2]
+[8, 8, 8, 8, 8, 3, 3, 3, 3, 8, 8, 6, 6, 6, 6, 6, 6, 8, 8, 9, 9, 8, 2]
+[8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 13:18:49] Generated output grid:
+[8, 8, 9, 9, 8, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 4, 4, 4, 4, 8]
+[8, 4, 4, 4, 4, 8]
+[8, 8, 3, 3, 8, 8]
+[8, 8, 3, 3, 8, 8]
+[6, 6, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6]
+[8, 8, 7, 7, 8, 8]
+[8, 8, 7, 7, 8, 8]
+[8, 3, 3, 3, 3, 8]
+[8, 3, 3, 3, 3, 8]
+[3, 3, 3, 3, 3, 3]
+[3, 3, 3, 3, 3, 3]
+
+
+============================================================
+=== Training 3 Comparison ===
+[2025-10-01 13:18:49] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 13:18:49] Executing on input grid:
+[2, 2, 2, 2, 2, 2, 2, 0]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 4, 4, 8, 1]
+[8, 3, 3, 8, 4, 4, 8, 1]
+[8, 3, 3, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 8, 8, 8, 1]
+[8, 3, 3, 8, 6, 3, 8, 1]
+[8, 3, 7, 8, 6, 3, 8, 1]
+[8, 7, 3, 8, 3, 3, 8, 1]
+[8, 7, 3, 8, 3, 3, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 5, 5, 8, 6, 6, 8, 1]
+[8, 5, 5, 8, 6, 6, 8, 1]
+[8, 8, 8, 8, 6, 6, 8, 1]
+[8, 8, 8, 8, 6, 6, 8, 1]
+[8, 7, 7, 8, 6, 6, 8, 1]
+[8, 7, 9, 8, 6, 6, 8, 1]
+[8, 9, 7, 8, 8, 8, 8, 1]
+[8, 7, 7, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 9, 9, 8, 1]
+[8, 8, 8, 8, 9, 9, 8, 1]
+[8, 9, 9, 8, 8, 8, 8, 1]
+[8, 9, 9, 8, 8, 8, 8, 1]
+[8, 9, 9, 8, 4, 4, 8, 1]
+[8, 9, 9, 8, 4, 4, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+[8, 8, 8, 8, 8, 8, 8, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 13:18:49] Generated output grid:
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[8, 3, 3, 3, 3, 8]
+[8, 6, 6, 3, 3, 8]
+[6, 6, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 9, 9, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[8, 8, 4, 4, 8, 8]
+[3, 3, 3, 3, 3, 7, 3, 3]
+[3, 3, 3, 3, 3, 3, 7, 7]
+[8, 8, 5, 5, 8, 8]
+[8, 8, 5, 5, 8, 8]
+[8, 7, 9, 7, 7, 8]
+[8, 7, 7, 9, 7, 8]
+[8, 9, 9, 9, 9, 8]
+[8, 9, 9, 9, 9, 8]
+

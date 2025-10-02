@@ -85,7 +85,7 @@ def extract_grade(attempt: str) -> int:
     return int(match.group(1)) if match else 0
 
 
-def remove_low_scoring_attempts(prev_attempts: List[str], max_removals: int = 5) -> List[str]:
+def remove_low_scoring_attempts(prev_attempts: List[str], max_removals: int = 10) -> List[str]:
     """Remove lowest scoring attempts (grade < 6/10), up to max_removals."""
     attempts_with_grades = [(attempt, extract_grade(attempt)) for attempt in prev_attempts]
     low_scoring = [(attempt, grade) for attempt, grade in attempts_with_grades if grade < 6]
@@ -110,8 +110,9 @@ def main_solve_loop(problem_path: str, log_dir: str, prev_attempts: List[str], i
     problem = load_problem(problem_path)
     test_input = extract_first_test_input(problem)
 
-    first_input_path = str(Path(log_dir) / "test_0_input.png")
+    first_input_path = str(Path(log_dir) / "train_0_input.png")
     first_output_path = str(Path(log_dir) / "train_0_output.png")
+    test_input_path = str(Path(log_dir) / "test_0_input.png")
 
     seed = ""
     images = []
@@ -129,19 +130,28 @@ def main_solve_loop(problem_path: str, log_dir: str, prev_attempts: List[str], i
     
     max_iter = 3
 
-    if iteration == 1:
+    if iteration == 0 or iteration == 1 or iteration == 4:
         max_iter = 5
 
     for i in range(max_iter):
         if iteration == 1:
             print("\nStage 1: Mini Image Analyzer")
-            mini_analyzer_result = PROMPT_mini_analyzer(first_input_path, first_output_path, log_dir)
+            mini_analyzer_result = PROMPT_mini_analyzer(first_input_path, first_output_path, test_input_path, log_dir)
 
             print("\nStage 2: Interconnection Finder")
             seed = PROMPT_interconnection_finder(mini_analyzer_result, problem_path, log_dir)
 
+        # Do some runs without context to increase the chances of the model taking a different path/new approach. 
+        # If we pass context, the model usually tries to base the next solution on that.
+        # This introduces some amount of varience while still remembering all attempts so 
+        # that they can be used/sorted in the future.
+        if (i == 0 and iteration != 4) or (i == 1 and iteration != 4) or (i == 2 and iteration == 1):
+            prev_attempts_str = ""
+        else:
+            prev_attempts_str = "\n\n=== Attempt ===\n".join([""] + prev_attempts)
+
         program = PROMPT_program_synth_with_feedback(
-            "\n\n=== Attempt ===\n".join([""] + prev_attempts), 
+            prev_attempts_str, 
             seed, problem_path, log_dir, i, images
         )
         execution_result = execute_dsl_on_problem(program, problem_path, log_dir)
@@ -160,7 +170,15 @@ def main_solve_loop(problem_path: str, log_dir: str, prev_attempts: List[str], i
         if execution_result.test_matches:
             print_validation_result(True, problem_path)
             return (prev_attempts, True)
-    
+
+        # Check if we have two 10/10 grades - exit early
+        perfect_scores = [attempt for attempt in prev_attempts if extract_grade(attempt) == 10]
+        if len(perfect_scores) >= 2:
+            print("[EARLY EXIT] Found 2 attempts with 10/10 grade")
+            print_validation_result(False, problem_path)
+            # Incorrectly return True to prevent further iteration
+            return (prev_attempts, True)
+
     return (prev_attempts, False)
 
 

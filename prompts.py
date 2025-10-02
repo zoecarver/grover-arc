@@ -54,17 +54,17 @@ Other considerations:
 """
 
 
-def PROMPT_mini_analyzer(input_img: str, output_img: str, log_dir: str) -> str:
+def PROMPT_mini_analyzer(input_img: str, output_img: str, test_img: str, log_dir: str) -> str:
     """Stage 1: Mini Image Analyzer with low reasoning."""
     prompt = "Succinctly describe all elements in this visual puzzle as one bullet list, generalized over both input and output."
 
     # prompt = "Succinctly describe all elements in this visual puzzle as one bullet list, generalized over both input and output or concatonate descriptions of both, depending on what makes sense and is consistent. Call out specific shapes and elements that you see. Be specific, complete, and succinct. Do not attempt to understand the transformation. Do not draw connections. Just enumerate the elements present. Give semantics and detailed descriptions (looks like a key, looks like a grid, looks like a cross). Elements may not be consistent across inputs and outputs, if this is the case, enumerate and describe elements in both."
-    
-    log_prompt(log_dir, "Stage 1: Mini Image Analyzer", 
-               f"Prompt: {prompt}\nInput image: {input_img}\nOutput image: {output_img}")
-    
-    response = prompt_with_images(prompt, input_img, output_img, 0)
-    
+
+    log_prompt(log_dir, "Stage 1: Mini Image Analyzer",
+               f"Prompt: {prompt}\nInput image: {input_img}\nOutput image: {output_img}\nTest image: {test_img}")
+
+    response = prompt_with_multiple_images_and_reasoning(prompt, [input_img, output_img, test_img], "medium", 0)
+
     log_response(log_dir, response)
     return response
 
@@ -149,7 +149,7 @@ IMPORTANT: look at the generated test outputs. The generated test outputs are th
 
 IMPORTANT: grade this attempt at the end. You must match the grading format EXACTLY: "MARK ATTEMPT GRADE: 10/10". 
 
-Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood and some training samples pass.
+Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood OR some training samples pass. Only give a high score (above 7/10) if core principles are demonstrated AND some training samples pass.
 
 OUTPUT FORMAT: Below is an example of what you should output. Make sure to include every section. Follow this format exactly.
 

@@ -1,0 +1,1149 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 20:35:59] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 12x12
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 1 - Output
+Size: 12x12
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Training Example 2 - Output
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 7, 0, 2, 8, 0, 0]
+[0, 6, 5, 5, 0, 1, 7, 0, 2, 3, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 0, 2, 0, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 7, 7, 7, 3, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 12x12
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Training Example 3 - Output
+Size: 12x12
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 3, 3, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 0, 9, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 0, 5, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 4 - Input
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 4 - Output
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 5 - Input
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 5 - Output
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 4, 6, 3, 3, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 5, 0, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 7, 7, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 6, 5, 5, 5, 5, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 3, 1, 1, 1, 0, 2, 2, 2, 2, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 12x12
+[2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 7, 7, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 6, 5, 5, 5, 5, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 3, 1, 1, 1, 0, 2, 2, 2, 2, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
+[2025-10-01 20:44:09] Response:
+```python
+from typing import List
+
+def get_top_color(g: List[List[int]]) -> int:
+    """Extract the top color from the first cell of the first row."""
+    return g[0][0]
+
+def remove_top_color_cells(g: List[List[int]], color: int) -> List[List[int]]:
+    """Remove all cells matching the top color from rows 1 to 11."""
+    new_g = [row[:] for row in g]
+    for i in range(1, 12):
+        for j in range(12):
+            if new_g[i][j] == color:
+                new_g[i][j] = 0
+    return new_g
+
+def apply_gravity_to_column(column: List[int]) -> List[int]:
+    """Apply gravity to a single column by collecting non-zero values and placing them at the bottom, preserving order."""
+    non_zero = [x for x in column if x != 0]
+    num_zeros = 12 - len(non_zero)
+    return [0] * num_zeros + non_zero
+
+def apply_gravity(g: List[List[int]]) -> List[List[int]]:
+    """Apply gravity to every column of the grid."""
+    new_g = [[0] * 12 for _ in range(12)]
+    for j in range(12):
+        column = [g[i][j] for i in range(12)]
+        new_column = apply_gravity_to_column(column)
+        for i in range(12):
+            new_g[i][j] = new_column[i]
+    return new_g
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    """Main program: remove top color cells and apply gravity."""
+    color = get_top_color(g)
+    g_removed = remove_top_color_cells(g, color)
+    g_final = apply_gravity(g_removed)
+    return g_final
+```
+
+
+============================================================
+=== Program Saved ===
+[2025-10-01 20:44:09] Python program saved to: logs/b6f77b65/20251001_203559/generated_program_204409.py
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 4, 6, 3, 3, 3, 1, 5, 5, 7, 7, 0]
+[9, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+
+
+============================================================
+=== Training 0 Comparison ===
+[2025-10-01 20:44:09] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 0, 5, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 7, 0, 2, 8, 0, 0]
+[0, 6, 9, 5, 0, 1, 7, 0, 2, 8, 3, 0]
+[0, 6, 9, 5, 0, 1, 7, 5, 2, 3, 3, 0]
+[4, 6, 5, 5, 0, 1, 7, 7, 7, 7, 3, 0]
+
+
+============================================================
+=== Training 1 Comparison ===
+[2025-10-01 20:44:09] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 3, 0]
+[0, 0, 0, 0, 0, 2, 5, 0, 5, 8, 3, 0]
+[0, 0, 9, 4, 0, 4, 7, 0, 2, 8, 3, 0]
+[0, 0, 9, 5, 0, 1, 7, 0, 2, 8, 4, 0]
+[0, 0, 9, 5, 0, 1, 7, 5, 2, 3, 4, 0]
+[6, 0, 5, 5, 4, 1, 7, 7, 7, 7, 4, 0]
+
+
+============================================================
+=== Training 2 Comparison ===
+[2025-10-01 20:44:09] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 0, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 0, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 0, 6, 3, 3, 3, 1, 5, 5, 7, 7, 0]
+[4, 0, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+
+
+============================================================
+=== Training 3 Comparison ===
+[2025-10-01 20:44:09] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 3, 3, 3, 1, 5, 5, 0, 0, 0]
+[7, 4, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0]
+
+
+============================================================
+=== Training 4 Comparison ===
+[2025-10-01 20:44:09] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 20:44:09] Executing on input grid:
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 7, 7, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 6, 5, 5, 5, 5, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 3, 1, 1, 1, 0, 2, 2, 2, 2, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 20:44:09] Generated output grid:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 6, 0, 5, 0, 5, 5, 0, 0, 0, 0]
+[0, 3, 6, 3, 1, 0, 2, 5, 0, 0, 9, 0]
+[0, 3, 6, 5, 1, 0, 2, 5, 0, 0, 9, 0]
+[7, 3, 1, 1, 1, 5, 2, 2, 2, 2, 9, 0]
+
+
+============================================================
+=== Execution Summary ===
+[2025-10-01 20:44:09] All training matches: False
+Test matches: False
+
+
+============================================================
+=== Stage DSL Extrapolate) ===
+[2025-10-01 20:44:09] Prompt:
+We are working on a visual puzzle. Your task is to summarize the last submission, talk about what worked, and what didn't in an effort to find the correct solution.
+
+You previously generated the following program which generated the following outputs:
+Program:
+```python
+from typing import List
+
+def get_top_color(g: List[List[int]]) -> int:
+    """Extract the top color from the first cell of the first row."""
+    return g[0][0]
+
+def remove_top_color_cells(g: List[List[int]], color: int) -> List[List[int]]:
+    """Remove all cells matching the top color from rows 1 to 11."""
+    new_g = [row[:] for row in g]
+    for i in range(1, 12):
+        for j in range(12):
+            if new_g[i][j] == color:
+                new_g[i][j] = 0
+    return new_g
+
+def apply_gravity_to_column(column: List[int]) -> List[int]:
+    """Apply gravity to a single column by collecting non-zero values and placing them at the bottom, preserving order."""
+    non_zero = [x for x in column if x != 0]
+    num_zeros = 12 - len(non_zero)
+    return [0] * num_zeros + non_zero
+
+def apply_gravity(g: List[List[int]]) -> List[List[int]]:
+    """Apply gravity to every column of the grid."""
+    new_g = [[0] * 12 for _ in range(12)]
+    for j in range(12):
+        column = [g[i][j] for i in range(12)]
+        new_column = apply_gravity_to_column(column)
+        for i in range(12):
+            new_g[i][j] = new_column[i]
+    return new_g
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    """Main program: remove top color cells and apply gravity."""
+    color = get_top_color(g)
+    g_removed = remove_top_color_cells(g, color)
+    g_final = apply_gravity(g_removed)
+    return g_final
+```
+
+Training example 1 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 4, 6, 3, 3, 3, 1, 5, 5, 7, 7, 0]
+[9, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+Expected:
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training example 2 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 0, 5, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 7, 0, 2, 8, 0, 0]
+[0, 6, 9, 5, 0, 1, 7, 0, 2, 8, 3, 0]
+[0, 6, 9, 5, 0, 1, 7, 5, 2, 3, 3, 0]
+[4, 6, 5, 5, 0, 1, 7, 7, 7, 7, 3, 0]
+Expected:
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 7, 0, 2, 8, 0, 0]
+[0, 6, 5, 5, 0, 1, 7, 0, 2, 3, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 0, 2, 0, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 7, 7, 7, 3, 0]
+
+Training example 3 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 3, 0]
+[0, 0, 0, 0, 0, 2, 5, 0, 5, 8, 3, 0]
+[0, 0, 9, 4, 0, 4, 7, 0, 2, 8, 3, 0]
+[0, 0, 9, 5, 0, 1, 7, 0, 2, 8, 4, 0]
+[0, 0, 9, 5, 0, 1, 7, 5, 2, 3, 4, 0]
+[6, 0, 5, 5, 4, 1, 7, 7, 7, 7, 4, 0]
+Expected:
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 3, 3, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 0, 9, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 0, 5, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Training example 4 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 0, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 0, 6, 0, 5, 3, 0, 5, 1, 7, 7, 0]
+[0, 0, 6, 3, 3, 3, 1, 5, 5, 7, 7, 0]
+[4, 0, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+Expected:
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+
+Training example 5 result: INCORRECT
+Generated:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 0, 1, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 5, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 3, 3, 3, 1, 5, 5, 0, 0, 0]
+[7, 4, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0]
+Expected:
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 4, 6, 3, 3, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 5, 0, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0]
+
+Test input generated output:
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 0, 0, 0]
+[0, 0, 6, 0, 5, 0, 5, 5, 0, 0, 0, 0]
+[0, 3, 6, 3, 1, 0, 2, 5, 0, 0, 9, 0]
+[0, 3, 6, 5, 1, 0, 2, 5, 0, 0, 9, 0]
+[7, 3, 1, 1, 1, 5, 2, 2, 2, 2, 9, 0]
+    **Think** about the correct output for the test input. Mentally run the puzzle rules and considerations over the test input grid and think about what the output should be and if the generated output matches. If it does not match, think about how best to update the program to handle the test input.
+    
+
+YOUR TASK: summarize the above attempts, summarize what worked, and what did not work. Summarize the problem as you understand it. Call out the high level puzzle rules as well as subtle elements of the puzzle that are easy to miss. Include all considerations across all attempts. Include helpful functions from attempts, such as functions to extract objects. 
+
+IMPORTANT: Be specific and list the observe effects (what was generated) and how they are different from what you expected. It's okay to say you don't know why something is different, but make sure to note that it IS different.
+
+You can include unhelpful functions, so that we don't use them in future attempts. Make sure to make it clear when a function is either broken or not helpful to the problem.
+
+IMPORTANT: look at the generated test outputs. The generated test outputs are the MOST IMPORTANT. Do the test outputs make sense? Do they look correct? If they do not look correct, explain why they are not correct.
+
+IMPORTANT: grade this attempt at the end. You must match the grading format EXACTLY: "MARK ATTEMPT GRADE: 10/10". 
+
+Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood OR some training samples pass. Only give a high score (above 7/10) if core principles are demonstrated AND some training samples pass.
+
+OUTPUT FORMAT: Below is an example of what you should output. Make sure to include every section. Follow this format exactly.
+
+============= EXAMPLE OUTPUT =============
+**High level:** this is a puzzle that... (one-two sentences)
+
+**Details, subtleties, key considerations:**
+ * Omit objects that...
+ * Make sure you match....
+ * And so on...
+
+**Helpful functions, types, and tools:**
+```python
+class PuzzleElement:
+    def __init__(self):
+        self.hole_count = ...
+```
+
+```python
+def extract_objects(g: List[List[int]]) -> PuzzleElement:
+    return ...
+```
+
+**Previous attempts:**
+ * Missed ommission of objects with hole count not in key
+ * Consider problems where key component does not stretch across the entire grid
+ * Missed X
+ * extract_objects is essential for Y
+ * Train 1 omitted the devider bar
+ * Train 1 mismatches blob shape for unkown reason (it's okay to say it's unknown)
+ * Function `extract_objects` is incorrect or not relevant to the puzzle (don't use it in the future)
+
+**Test output:**
+ * The test output does not look correct in any attempt
+ * The test output is missing X and Y
+ * Make sure to account for keys with ... to handle test case
+
+ MARK ATTEMPT GRADE: X/10
+
+
+[2025-10-01 20:44:49] Response:
+**High level:** This puzzle involves a 12x12 grid where the top row (row 0) appears to select a color (specifically from the leftmost cell g[0][0]) to remove all matching instances from the play area (likely rows 1-11), followed by gravity that causes remaining non-zero cells to fall downward within columns, while the top row is specially handled (e.g., updated or preserved in a way that places the selected color at [color, 0, ..., 0] on top). The goal is to produce a new grid matching this transformation, preserving group structures and positions as seen in expected outputs.
+
+**Details, subtleties, key considerations:**
+ * The top row is special and not part of the standard play area; removal targets only rows 1-11, but the top row must be explicitly set or preserved post-gravity (e.g., in all expected outputs, row 0 becomes [original_g[0][0], 0, 0, ..., 0], suggesting the selected color "pops" to the top-left while the rest of row 0 is cleared).
+ * Gravity applies downward (non-zeros shift to higher row indices/bottom of columns), but only to the play area (rows 1-11); applying it to the full grid causes the top row to incorrectly fall away, leading to all-zero top rows in generated outputs.
+ * Subtle group preservation: Expected outputs maintain connected groups of same-color cells (e.g., horizontal/vertical clusters of 1s, 5s, etc.) in their relative orders but shifted down after removal, without merging or reordering within columns—e.g., in train 1, a cluster of four 1s in row 2 expected, but generated scatters them at bottom; similar in train 2 with 5s and 7s not grouping correctly.
+ * Removal is color-specific and total (all matching cells in target rows set to 0), but does not affect the top row itself; however, post-removal, the top row must be overridden to [color, 0*11] to match expectations.
+ * Edge cases include sparse grids with isolated cells or long vertical stacks; gravity must preserve order of non-zeros (top-to-bottom original order maintained at bottom), but current implementation does this correctly yet applies it wrongly to full grid.
+ * No matching or combo mechanics evident (just single-color removal); zeros are empty space, and numbers 1-9 are colors.
+ * Potential subtlety: In some expectations (e.g., train 3), groups like 4s or 7s shift but leave gaps filled by falling above cells, indicating per-column independent gravity without horizontal movement.
+ * All training examples show generated outputs with 7-8 all-zero rows at top and compressed content at bottom, mismatching the expected mixed distribution (top row populated, mid/bottom with shifted groups).
+ * Unclear input grids (not provided), but inferred from outputs: Original grids likely have non-zero top row, dense bottom, and the selected color scattered in play area.
+
+**Helpful functions, types, and tools:**
+```python
+def get_top_color(g: List[List[int]]) -> int:
+    """Extract the top color from the first cell of the first row."""
+    return g[0][0]
+```
+(This is correct and useful for selecting the color to remove.)
+
+```python
+def apply_gravity_to_column(column: List[int]) -> List[int]:
+    """Apply gravity to a single column by collecting non-zero values and placing them at the bottom, preserving order."""
+    non_zero = [x for x in column if x != 0]
+    num_zeros = 12 - len(non_zero)
+    return [0] * num_zeros + non_zero
+
+def apply_gravity(g: List[List[int]]) -> List[List[int]]:
+    """Apply gravity to every column of the grid."""
+    new_g = [[0] * 12 for _ in range(12)]
+    for j in range(12):
+        column = [g[i][j] for i in range(12)]
+        new_column = apply_gravity_to_column(column)
+        for i in range(12):
+            new_g[i][j] = new_column[i]
+    return new_g
+```
+(These are correct for downward gravity per column, preserving order; useful but must be applied only to rows 1-12 or adjusted post-removal to avoid shifting top row.)
+
+```python
+def remove_top_color_cells(g: List[List[int]], color: int) -> List[List[int]]:
+    """Remove all cells matching the top color from rows 1 to 11."""
+    new_g = [row[:] for row in g]
+    for i in range(1, 12):
+        for j in range(12):
+            if new_g[i][j] == color:
+                new_g[i][j] = 0
+    return new_g
+```
+(This targets the right rows for removal and is mostly correct, but the main program must then set new_g[0] = [color] + [0]*11 before/after gravity on play area.)
+
+**Previous attempts:**
+ * This single attempt (the provided program) correctly identifies the top color and removes it only from rows 1-11, which aligns with not touching the top row during removal.
+ * Gravity implementation works mechanically (preserves order, per-column downward shift), but applying it to the full 12 rows causes the unchanged top row to fall to the bottom, resulting in all-zero top rows—opposite of expected where top row is populated with [color, 0*11].
+ * In train 1: Generated has empty top 7 rows and bottom-compressed grid (e.g., row 11 [9,4,2,...] includes fallen top color 9), but expected has [9,0*11] on top, zero row 1, and mid-grid groups like 5-1 cluster in rows 2-5/8-11 not compressed fully; difference is top row loss and over-compression.
+ * In train 2: Generated compresses to bottom (e.g., row 11 [4,6,5,...] with fallen 4), but expected has [4,0*11] on top, empty rows 1-4, and partial groups (e.g., 2s in col5 rows 5-9, 5s grouped in row6 but not in generated); difference in top population and group positioning (generated scatters 5s/7s wrongly).
+ * In train 3: Similar issue—generated falls everything to bottom (row 11 [6,0,5,...] with 6 fallen), expected [6,0*11] on top, groups like 2s in col5 rows 5-9 and 4s in row8; generated mismatches by having 4s/5s in wrong positions (e.g., row9 [0,0,9,5,...] vs expected scattered 5s lower).
+ * In train 4: Generated bottom-heavy (row 11 [4,0,2,...]), expected [4,0*11] on top, empty rows 1-5, 5-1 groups in rows 6-8; difference: top empty in generated, and 6-3 groups in rows 9-11 not gapped correctly (generated no gaps).
+ * In train 5: Generated bottom [7,4,2,...] with 7 fallen, expected [7,0*11] on top, empty rows 1-5, 5-1 in row8, 4-6-3 in rows 9-12 with gaps; generated lacks gaps and top [7,0*11].
+ * Overall, all attempts fail due to full-grid gravity; no extraction of "objects" or groups attempted, but may be needed for future if groups must be treated as units (though not evident yet).
+ * No unhelpful functions in this attempt—all provided are relevant but misapplied in main program.
+
+**Test output:**
+ * The generated test output follows the same pattern as training failures: 4 all-zero rows at top, then sparse mid-grid (e.g., 4s in col2 rows 4-7, 3s in col4 rows 4-10, 8s in col6 rows 5-8), and bottom row 11 [7,3,1,1,1,5,2,2,2,2,9,0]—this looks incorrect because it compresses everything downward without populating the top row, similar to training mismatches.
+ * Expected test output likely has [7,0*11] on row 0 (inferring top-left color 7 from bottom-left in generated, matching pattern), with play area gravity only (rows 1-11), preserving groups like vertical 3s in col1/3/4, horizontal 1s/2s/5s at bottom but with gaps from removal (e.g., removed color probably 0 or whatever g[0][0] was, leading to falls like 6-5 in col2/4).
+ * Does not make sense as correct: Lacks top row [color,0*11], over-compresses (e.g., no empty rows mid-grid as in train expectations), and groups like 1s in row11 cols 3-5 or 2s cols7-10 should have gapped falls if removal hit interspersed cells; unknown exact input but pattern suggests same top-handling error.
+
+MARK ATTEMPT GRADE: 3/10
+
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 20:44:49] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 12x12
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 1 - Output
+Size: 12x12
+[9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Training Example 2 - Output
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 0, 0, 2, 7, 0, 2, 8, 0, 0]
+[0, 6, 5, 5, 0, 1, 7, 0, 2, 3, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 0, 2, 0, 3, 0]
+[0, 6, 0, 5, 0, 1, 7, 7, 7, 7, 3, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 12x12
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 3, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 0, 0, 0, 7, 0, 2, 0, 3, 0]
+[0, 6, 5, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 6, 0, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Training Example 3 - Output
+Size: 12x12
+[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 5, 5, 5, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 3, 3, 0]
+[0, 0, 0, 0, 0, 2, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 4, 4, 4, 7, 0, 2, 0, 3, 0]
+[0, 0, 9, 5, 0, 1, 7, 7, 7, 7, 4, 0]
+[0, 0, 9, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+[0, 0, 5, 5, 0, 1, 0, 0, 0, 0, 4, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  8 = maroon
+  9 = light blue
+--------------------------------------------------------------------------------
+
+Training Example 4 - Input
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 4 - Output
+Size: 12x12
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 7, 0]
+[0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 5 - Input
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+[0, 0, 6, 3, 3, 3, 0, 5, 5, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 3, 0, 5, 0, 7, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0]
+
+Training Example 5 - Output
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 5, 1, 1, 1, 1, 0, 0, 0]
+[0, 4, 6, 3, 3, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 1, 0, 0, 0]
+[0, 4, 6, 0, 0, 3, 0, 5, 5, 0, 0, 0]
+[0, 4, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 12x12
+[7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 7, 7, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 6, 5, 5, 5, 5, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 3, 1, 1, 1, 0, 2, 2, 2, 2, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 12x12
+[2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 7, 7, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 4, 0, 3, 0, 8, 0, 0, 7, 0, 0]
+[0, 0, 6, 5, 5, 5, 5, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 0, 6, 0, 0, 0, 0, 5, 0, 7, 0, 0]
+[0, 3, 1, 1, 1, 0, 2, 2, 2, 2, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+[0, 3, 0, 0, 1, 0, 2, 0, 0, 0, 9, 0]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+

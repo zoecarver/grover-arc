@@ -1,0 +1,1010 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 17:25:16] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 19x19
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 1 - Output
+Size: 7x19
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+
+Colors present:
+  1 = blue
+  4 = yellow
+  6 = pink
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 25x19
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+Training Example 2 - Output
+Size: 7x19
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+
+Colors present:
+  1 = blue
+  3 = green
+  4 = yellow
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 29x29
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 25x25
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 3, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 8, 3, 8, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 8, 3, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 3, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
+[2025-10-01 17:28:26] Response:
+```python
+from collections import Counter
+from typing import List, Tuple
+
+def get_border_color(g: List[List[int]]) -> int:
+    return g[0][0] if g else 0
+
+def get_wall_columns(g: List[List[int]], B: int) -> List[int]:
+    H = len(g)
+    if H == 0:
+        return []
+    W = len(g[0])
+    walls = []
+    for j in range(W):
+        if all(g[i][j] == B for i in range(H)):
+            walls.append(j)
+    return walls
+
+def get_patterns_for_row(g_row: List[int], walls: List[int]) -> List[Tuple[int, ...]]:
+    patterns = []
+    for k in range(len(walls) - 1):
+        start = walls[k] + 1
+        end = walls[k + 1]
+        pat = tuple(g_row[start:end])
+        patterns.append(pat)
+    return patterns
+
+def choose_pattern(patterns: List[Tuple[int, ...]]) -> List[int]:
+    if not patterns:
+        return []
+    count = Counter(patterns)
+    singles = [pat for pat, cnt in count.items() if cnt == 1]
+    if singles:
+        return list(singles[0])
+    else:
+        mc = count.most_common(1)[0][0]
+        return list(mc)
+
+def select_middle(chosen: List[int]) -> List[int]:
+    return chosen[:5]
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g:
+        return []
+    H = len(g)
+    B = get_border_color(g)
+    walls = get_wall_columns(g, B)
+    out = []
+    for i in range(H):
+        g_row = g[i]
+        if all(x == B for x in g_row):
+            out_row = [B] * 7
+        else:
+            patterns = get_patterns_for_row(g_row, walls)
+            chosen = choose_pattern(patterns)
+            middle = select_middle(chosen)
+            out_row = [B] + middle + [B]
+        out.append(out_row)
+    return out
+```
+
+
+============================================================
+=== Program Saved ===
+[2025-10-01 17:28:26] Python program saved to: logs/38007db0/20251001_172516/generated_program_172826.py
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:28:26] Executing on input grid:
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:28:26] Generated output grid:
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+
+
+============================================================
+=== Training 0 Comparison ===
+[2025-10-01 17:28:26] Matches expected: True
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:28:26] Executing on input grid:
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:28:26] Generated output grid:
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+
+
+============================================================
+=== Training 1 Comparison ===
+[2025-10-01 17:28:26] Matches expected: True
+
+
+============================================================
+=== Execution Start ===
+[2025-10-01 17:28:26] Executing on input grid:
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-01 17:28:26] Generated output grid:
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 1, 1, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+
+
+============================================================
+=== Execution Summary ===
+[2025-10-01 17:28:26] All training matches: True
+Test matches: False
+
+
+============================================================
+=== Stage DSL Extrapolate) ===
+[2025-10-01 17:28:26] Prompt:
+We are working on a visual puzzle. Your task is to summarize the last submission, talk about what worked, and what didn't in an effort to find the correct solution.
+
+You previously generated the following program which generated the following outputs:
+Program:
+```python
+from collections import Counter
+from typing import List, Tuple
+
+def get_border_color(g: List[List[int]]) -> int:
+    return g[0][0] if g else 0
+
+def get_wall_columns(g: List[List[int]], B: int) -> List[int]:
+    H = len(g)
+    if H == 0:
+        return []
+    W = len(g[0])
+    walls = []
+    for j in range(W):
+        if all(g[i][j] == B for i in range(H)):
+            walls.append(j)
+    return walls
+
+def get_patterns_for_row(g_row: List[int], walls: List[int]) -> List[Tuple[int, ...]]:
+    patterns = []
+    for k in range(len(walls) - 1):
+        start = walls[k] + 1
+        end = walls[k + 1]
+        pat = tuple(g_row[start:end])
+        patterns.append(pat)
+    return patterns
+
+def choose_pattern(patterns: List[Tuple[int, ...]]) -> List[int]:
+    if not patterns:
+        return []
+    count = Counter(patterns)
+    singles = [pat for pat, cnt in count.items() if cnt == 1]
+    if singles:
+        return list(singles[0])
+    else:
+        mc = count.most_common(1)[0][0]
+        return list(mc)
+
+def select_middle(chosen: List[int]) -> List[int]:
+    return chosen[:5]
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g:
+        return []
+    H = len(g)
+    B = get_border_color(g)
+    walls = get_wall_columns(g, B)
+    out = []
+    for i in range(H):
+        g_row = g[i]
+        if all(x == B for x in g_row):
+            out_row = [B] * 7
+        else:
+            patterns = get_patterns_for_row(g_row, walls)
+            chosen = choose_pattern(patterns)
+            middle = select_middle(chosen)
+            out_row = [B] + middle + [B]
+        out.append(out_row)
+    return out
+```
+
+Training example 1 result: CORRECT
+
+Training example 2 result: CORRECT
+
+Test input generated output:
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 1, 1, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 4]
+[4, 8, 1, 8, 8, 1, 4]
+[4, 8, 1, 8, 1, 1, 4]
+[4, 8, 1, 1, 8, 1, 4]
+[4, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4]
+    **Think** about the correct output for the test input. Mentally run the puzzle rules and considerations over the test input grid and think about what the output should be and if the generated output matches. If it does not match, think about how best to update the program to handle the test input.
+    
+
+YOUR TASK: summarize the above attempts, summarize what worked, and what did not work. Summarize the problem as you understand it. Call out the high level puzzle rules as well as subtle elements of the puzzle that are easy to miss. Include all considerations across all attempts. Include helpful functions from attempts, such as functions to extract objects. 
+
+IMPORTANT: Be specific and list the observe effects (what was generated) and how they are different from what you expected. It's okay to say you don't know why something is different, but make sure to note that it IS different.
+
+You can include unhelpful functions, so that we don't use them in future attempts. Make sure to make it clear when a function is either broken or not helpful to the problem.
+
+IMPORTANT: look at the generated test outputs. The generated test outputs are the MOST IMPORTANT. Do the test outputs make sense? Do they look correct? If they do not look correct, explain why they are not correct.
+
+IMPORTANT: grade this attempt at the end. You must match the grading format EXACTLY: "MARK ATTEMPT GRADE: 10/10". 
+
+Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood OR some training samples pass. Only give a high score (above 7/10) if core principles are demonstrated AND some training samples pass.
+
+OUTPUT FORMAT: Below is an example of what you should output. Make sure to include every section. Follow this format exactly.
+
+============= EXAMPLE OUTPUT =============
+**High level:** this is a puzzle that... (one-two sentences)
+
+**Details, subtleties, key considerations:**
+ * Omit objects that...
+ * Make sure you match....
+ * And so on...
+
+**Helpful functions, types, and tools:**
+```python
+class PuzzleElement:
+    def __init__(self):
+        self.hole_count = ...
+```
+
+```python
+def extract_objects(g: List[List[int]]) -> PuzzleElement:
+    return ...
+```
+
+**Previous attempts:**
+ * Missed ommission of objects with hole count not in key
+ * Consider problems where key component does not stretch across the entire grid
+ * Missed X
+ * extract_objects is essential for Y
+ * Train 1 omitted the devider bar
+ * Train 1 mismatches blob shape for unkown reason (it's okay to say it's unknown)
+ * Function `extract_objects` is incorrect or not relevant to the puzzle (don't use it in the future)
+
+**Test output:**
+ * The test output does not look correct in any attempt
+ * The test output is missing X and Y
+ * Make sure to account for keys with ... to handle test case
+
+ MARK ATTEMPT GRADE: X/10
+
+
+[2025-10-01 17:28:58] Response:
+**High level:** This is a visual puzzle involving grid transformation where an input grid (likely representing a larger scene or pattern with borders and internal structures) is processed to extract and reconstruct simplified row patterns, focusing on borders, vertical walls, and repeating or unique segments between them to generate a standardized 7-column output grid that highlights core shapes or motifs.
+
+**Details, subtleties, key considerations:**
+ * The border color (B) is consistently the value at g[0][0], assuming uniform top-left coloring; all rows must be padded or reconstructed to exactly 7 columns with B on both ends.
+ * Vertical "walls" are full-height columns entirely filled with B, dividing the grid into segments; patterns are extracted only from non-wall segments between consecutive walls.
+ * For each row, if the entire row is B, output a full B row; otherwise, collect tuple patterns from segments across all rows at that level, then select either the unique pattern (if any appears once) or the most common one.
+ * Subtlety: Only the middle 5 elements of the chosen pattern are used for the output row (after B padding), which assumes patterns are at least 5 long or truncates/extends implicitly— this can lose edge details or cause mismatches if patterns vary in length.
+ * Patterns are row-specific but chosen globally per row index across all segments; this favors horizontal consistency but may ignore vertical context or object boundaries.
+ * Easy to miss: Empty grids return empty outputs; no handling for uneven wall counts or non-uniform widths; assumes all rows have the same width (W).
+ * If no patterns, output defaults to empty list per row, but code implicitly handles by padding—potential for all-B rows in edge cases.
+ * Broader considerations: The puzzle likely involves identifying "objects" or motifs (e.g., shapes made of numbers like 1's and 8's) bounded by walls/borders, simplifying to a canonical view; repetitions in output suggest tiling or multiple instances; color values (e.g., 4 as border, 8/1 as fill) imply semantic meaning (e.g., 4=wall, 8=background, 1=foreground).
+
+**Helpful functions, types, and tools:**
+```python
+from collections import Counter
+from typing import List, Tuple
+
+def get_border_color(g: List[List[int]]) -> int:
+    return g[0][0] if g else 0
+```
+(Identifies uniform border value from top-left; simple but essential for consistency.)
+
+```python
+def get_wall_columns(g: List[List[int]], B: int) -> List[int]:
+    H = len(g)
+    if H == 0:
+        return []
+    W = len(g[0])
+    walls = []
+    for j in range(W):
+        if all(g[i][j] == B for i in range(H)):
+            walls.append(j)
+    return walls
+```
+(Extracts full vertical walls; critical for segmenting the grid into pattern areas; assumes uniform row lengths.)
+
+```python
+def get_patterns_for_row(g_row: List[int], walls: List[int]) -> List[Tuple[int, ...]]:
+    patterns = []
+    for k in range(len(walls) - 1):
+        start = walls[k] + 1
+        end = walls[k + 1]
+        pat = tuple(g_row[start:end])
+        patterns.append(pat)
+    return patterns
+```
+(Extracts segments between walls per row; turns slices into immutable tuples for counting; ignores anything before first or after last wall.)
+
+```python
+def choose_pattern(patterns: List[Tuple[int, ...]]) -> List[int]:
+    if not patterns:
+        return []
+    count = Counter(patterns)
+    singles = [pat for pat, cnt in count.items() if cnt == 1]
+    if singles:
+        return list(singles[0])
+    else:
+        mc = count.most_common(1)[0][0]
+        return list(mc)
+```
+(Selects unique or most common pattern; prioritizes rarity for distinct motifs, falls back to frequency—helpful for noisy or repetitive inputs.)
+
+```python
+def select_middle(chosen: List[int]) -> List[int]:
+    return chosen[:5]
+```
+(Truncates to middle 5; assumes patterns >=5 long, but slices first 5 if shorter—may need adjustment for variable lengths.)
+
+```python
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g:
+        return []
+    H = len(g)
+    B = get_border_color(g)
+    walls = get_wall_columns(g, B)
+    out = []
+    for i in range(H):
+        g_row = g[i]
+        if all(x == B for x in g_row):
+            out_row = [B] * 7
+        else:
+            patterns = get_patterns_for_row(g_row, walls)
+            chosen = choose_pattern(patterns)
+            middle = select_middle(chosen)
+            out_row = [B] + middle + [B]
+        out.append(out_row)
+    return out
+```
+(Full orchestrator; handles all-B rows specially; reconstructs to fixed 7-width—core to the transformation.)
+
+**Previous attempts:**
+ * This is the primary (last) submission analyzed; it successfully handled training examples 1 and 2 fully (both marked CORRECT), demonstrating solid grasp of border/wall detection and pattern selection for simple cases.
+ * Worked well: Uniform borders and walls extracted correctly; pattern choice via uniqueness/majority vote captures core motifs; fixed 7-column output with padding maintains shape integrity.
+ * Did not work/ limitations: select_middle always takes first 5, which may not truly be "middle" (e.g., for len=6, it skips last; for len<5, it truncates without padding); no handling for patterns shorter than 5 (outputs shorter rows implicitly padded? but code adds only [B] + middle + [B], so if middle<5, row<7—potential bug).
+ * In test, patterns seem to repeat across row indices, but choice logic may over-select similar segments, leading to redundant outputs; no vertical pattern correlation (e.g., doesn't track object continuity across rows).
+ * get_patterns_for_row ignores outer segments (before first wall or after last), which worked for training but may miss full-width objects in test.
+ * choose_pattern defaults to most common if no singles, which is good for consensus but could homogenize distinct variations.
+ * No unhelpful functions in this attempt—all are relevant; however, if patterns vary greatly in length, select_middle is suboptimal (consider centering or padding with background).
+
+**Test output:**
+ * The generated test output consists of 30 rows forming ~4 stacked 7x7 (or similar) blocks separated by full border rows ([4]*7), each depicting a symmetric shape: borders of 4's, interior mostly 8's (background?) with 1's forming a cross-like or letter "H" motif (e.g., vertical 1's in columns 3 and 6, horizontal in row 4).
+ * It looks partially correct and makes sense for a repetitive motif-extraction puzzle: the consistency in pattern choice (e.g., selecting [8,1,8,8,1] or variants) suggests walls are detected properly, and middle-5 slicing captures the core "1" placements without edges.
+ * However, it does not look fully correct—blocks are nearly identical except the last one has slight asymmetries (e.g., row 24: [4,8,1,1,8,1,4] vs. earlier [4,8,1,8,8,1,4]), implying inconsistent pattern selection across similar rows, possibly due to minor input variations not handled (e.g., if test input has noise or multiple motifs, uniqueness logic picks outliers); expected output likely has exact repetition or refined symmetry, as the variations (e.g., extra 1's in positions 4/5) differ from the stable upper blocks without clear reason (unknown if input has evolving patterns or if slicing errs). Additionally, if input height is 30+, output matches height but fixed width may clip complex inputs; no all-4 rows mid-block where input might have horizontals.
+
+MARK ATTEMPT GRADE: 8/10
+
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-01 17:28:58] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+=== Attempt ===
+**High level:** This is a visual puzzle involving grid transformation where an input grid (likely representing a larger scene or pattern with borders and internal structures) is processed to extract and reconstruct simplified row patterns, focusing on borders, vertical walls, and repeating or unique segments between them to generate a standardized 7-column output grid that highlights core shapes or motifs.
+
+**Details, subtleties, key considerations:**
+ * The border color (B) is consistently the value at g[0][0], assuming uniform top-left coloring; all rows must be padded or reconstructed to exactly 7 columns with B on both ends.
+ * Vertical "walls" are full-height columns entirely filled with B, dividing the grid into segments; patterns are extracted only from non-wall segments between consecutive walls.
+ * For each row, if the entire row is B, output a full B row; otherwise, collect tuple patterns from segments across all rows at that level, then select either the unique pattern (if any appears once) or the most common one.
+ * Subtlety: Only the middle 5 elements of the chosen pattern are used for the output row (after B padding), which assumes patterns are at least 5 long or truncates/extends implicitly— this can lose edge details or cause mismatches if patterns vary in length.
+ * Patterns are row-specific but chosen globally per row index across all segments; this favors horizontal consistency but may ignore vertical context or object boundaries.
+ * Easy to miss: Empty grids return empty outputs; no handling for uneven wall counts or non-uniform widths; assumes all rows have the same width (W).
+ * If no patterns, output defaults to empty list per row, but code implicitly handles by padding—potential for all-B rows in edge cases.
+ * Broader considerations: The puzzle likely involves identifying "objects" or motifs (e.g., shapes made of numbers like 1's and 8's) bounded by walls/borders, simplifying to a canonical view; repetitions in output suggest tiling or multiple instances; color values (e.g., 4 as border, 8/1 as fill) imply semantic meaning (e.g., 4=wall, 8=background, 1=foreground).
+
+**Helpful functions, types, and tools:**
+```python
+from collections import Counter
+from typing import List, Tuple
+
+def get_border_color(g: List[List[int]]) -> int:
+    return g[0][0] if g else 0
+```
+(Identifies uniform border value from top-left; simple but essential for consistency.)
+
+```python
+def get_wall_columns(g: List[List[int]], B: int) -> List[int]:
+    H = len(g)
+    if H == 0:
+        return []
+    W = len(g[0])
+    walls = []
+    for j in range(W):
+        if all(g[i][j] == B for i in range(H)):
+            walls.append(j)
+    return walls
+```
+(Extracts full vertical walls; critical for segmenting the grid into pattern areas; assumes uniform row lengths.)
+
+```python
+def get_patterns_for_row(g_row: List[int], walls: List[int]) -> List[Tuple[int, ...]]:
+    patterns = []
+    for k in range(len(walls) - 1):
+        start = walls[k] + 1
+        end = walls[k + 1]
+        pat = tuple(g_row[start:end])
+        patterns.append(pat)
+    return patterns
+```
+(Extracts segments between walls per row; turns slices into immutable tuples for counting; ignores anything before first or after last wall.)
+
+```python
+def choose_pattern(patterns: List[Tuple[int, ...]]) -> List[int]:
+    if not patterns:
+        return []
+    count = Counter(patterns)
+    singles = [pat for pat, cnt in count.items() if cnt == 1]
+    if singles:
+        return list(singles[0])
+    else:
+        mc = count.most_common(1)[0][0]
+        return list(mc)
+```
+(Selects unique or most common pattern; prioritizes rarity for distinct motifs, falls back to frequency—helpful for noisy or repetitive inputs.)
+
+```python
+def select_middle(chosen: List[int]) -> List[int]:
+    return chosen[:5]
+```
+(Truncates to middle 5; assumes patterns >=5 long, but slices first 5 if shorter—may need adjustment for variable lengths.)
+
+```python
+def program(g: List[List[int]]) -> List[List[int]]:
+    if not g:
+        return []
+    H = len(g)
+    B = get_border_color(g)
+    walls = get_wall_columns(g, B)
+    out = []
+    for i in range(H):
+        g_row = g[i]
+        if all(x == B for x in g_row):
+            out_row = [B] * 7
+        else:
+            patterns = get_patterns_for_row(g_row, walls)
+            chosen = choose_pattern(patterns)
+            middle = select_middle(chosen)
+            out_row = [B] + middle + [B]
+        out.append(out_row)
+    return out
+```
+(Full orchestrator; handles all-B rows specially; reconstructs to fixed 7-width—core to the transformation.)
+
+**Previous attempts:**
+ * This is the primary (last) submission analyzed; it successfully handled training examples 1 and 2 fully (both marked CORRECT), demonstrating solid grasp of border/wall detection and pattern selection for simple cases.
+ * Worked well: Uniform borders and walls extracted correctly; pattern choice via uniqueness/majority vote captures core motifs; fixed 7-column output with padding maintains shape integrity.
+ * Did not work/ limitations: select_middle always takes first 5, which may not truly be "middle" (e.g., for len=6, it skips last; for len<5, it truncates without padding); no handling for patterns shorter than 5 (outputs shorter rows implicitly padded? but code adds only [B] + middle + [B], so if middle<5, row<7—potential bug).
+ * In test, patterns seem to repeat across row indices, but choice logic may over-select similar segments, leading to redundant outputs; no vertical pattern correlation (e.g., doesn't track object continuity across rows).
+ * get_patterns_for_row ignores outer segments (before first wall or after last), which worked for training but may miss full-width objects in test.
+ * choose_pattern defaults to most common if no singles, which is good for consensus but could homogenize distinct variations.
+ * No unhelpful functions in this attempt—all are relevant; however, if patterns vary greatly in length, select_middle is suboptimal (consider centering or padding with background).
+
+**Test output:**
+ * The generated test output consists of 30 rows forming ~4 stacked 7x7 (or similar) blocks separated by full border rows ([4]*7), each depicting a symmetric shape: borders of 4's, interior mostly 8's (background?) with 1's forming a cross-like or letter "H" motif (e.g., vertical 1's in columns 3 and 6, horizontal in row 4).
+ * It looks partially correct and makes sense for a repetitive motif-extraction puzzle: the consistency in pattern choice (e.g., selecting [8,1,8,8,1] or variants) suggests walls are detected properly, and middle-5 slicing captures the core "1" placements without edges.
+ * However, it does not look fully correct—blocks are nearly identical except the last one has slight asymmetries (e.g., row 24: [4,8,1,1,8,1,4] vs. earlier [4,8,1,8,8,1,4]), implying inconsistent pattern selection across similar rows, possibly due to minor input variations not handled (e.g., if test input has noise or multiple motifs, uniqueness logic picks outliers); expected output likely has exact repetition or refined symmetry, as the variations (e.g., extra 1's in positions 4/5) differ from the stable upper blocks without clear reason (unknown if input has evolving patterns or if slicing errs). Additionally, if input height is 30+, output matches height but fixed width may clip complex inputs; no all-4 rows mid-block where input might have horizontals.
+
+MARK ATTEMPT GRADE: 8/10
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 19x19
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+Training Example 1 - Output
+Size: 7x19
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 4, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 6, 6, 1]
+[1, 6, 6, 4, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 4, 6, 6, 6, 1]
+[1, 6, 4, 4, 4, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 6, 6, 6, 6, 6, 1]
+[1, 1, 1, 1, 1, 1, 1]
+
+Colors present:
+  1 = blue
+  4 = yellow
+  6 = pink
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 25x19
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 1, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 4, 4, 3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+Training Example 2 - Output
+Size: 7x19
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 1, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 1, 1, 4, 3]
+[3, 4, 1, 1, 4, 4, 3]
+[3, 4, 4, 4, 4, 4, 3]
+[3, 3, 3, 3, 3, 3, 3]
+
+Colors present:
+  1 = blue
+  3 = green
+  4 = yellow
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 29x29
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4]
+[4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 1, 1, 1, 8, 4, 8, 1, 8, 1, 1, 8, 4]
+[4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 8, 8, 1, 8, 4, 8, 1, 1, 8, 1, 8, 4]
+[4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 8, 4]
+[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 25x25
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 3, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 8, 3, 8, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 8, 3, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1]
+[1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1, 3, 3, 8, 3, 3, 1]
+[1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 8, 3, 1, 3, 8, 8, 3, 3, 1]
+[1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
