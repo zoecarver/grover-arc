@@ -28,11 +28,13 @@ The solver withholds previous attempt context on early runs within each iteratio
 
 The input context directly shapes the output through attention mechanisms. When the model processes input tokens, attention heads compute relationships between all tokens, creating connections that determine which patterns get amplified in the output. As the context fills with attempts and their grades, these attention connections accumulate. High-scoring attempts positioned late in context create strong attention patterns that pull subsequent generations toward similar solution structures. The more relevant context the model sees, the more connections it can make in productive directions.
 
-This seems contradictory to context rot, where too much information degrades performance. The difference is that search benefits from saturation when the context is structured to guide exploration. By keeping all attempts sorted by quality, the model sees the full landscape of what works and what fails. Failed attempts still provide value by showing dead ends, helping the model avoid repeating mistakes. The grading system acts as a fitness landscape that attention mechanisms can navigate.
+This seems contradictory to context rot, where too much information degrades performance. The difference is that search benefits from saturation when the context is structured to guide exploration and the search problem remains consistent. By keeping all attempts sorted by quality, the model sees the full landscape of what works and what fails. Failed attempts still provide value by showing dead ends, helping the model avoid repeating mistakes. The grading system acts as a fitness landscape that attention mechanisms can navigate.
 
 ### Parallels to Grover's algorithm
 
 The inspiration for this implementations comes two fold: 1) from previous work that has demonstrated many iterations and RL-style search are successful and 2) from Grover's quantum search algorithm, specifically 3Blue1Brown's explanation of it on YouTube. 
+
+![Transformer and Quantum Computing Comparison](/Users/zoecarver/Desktop/transformer_quantum_comparison.png)
 
 Quantum computers and transformers share some structural similarities: both output probability distributions over states, both feature complete interconnectedness (quantum superposition connects all basis states through the wavefunction; self-attention connects all tokens through query-key relationships), and both use operations that redistribute probability mass (Grover's diffusion operator parallels softmax normalization in attention).
 
