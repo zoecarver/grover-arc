@@ -1,0 +1,823 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-02 12:26:56] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 14x20
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Training Example 1 - Output
+Size: 14x20
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Colors present:
+  1 = blue
+  3 = green
+  8 = maroon
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 30x24
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Training Example 2 - Output
+Size: 30x24
+[1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 4, 0, 4, 0, 3, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 21x22
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 6, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 9, 0, 6, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 9, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 6, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 6, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 7, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 7, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 7, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 6, 0, 2, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 6, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+
+[2025-10-02 12:38:39] Response:
+```python
+from typing import List
+import copy
+
+def propagate_max_color_along_antidiagonals(g: List[List[int]]) -> List[List[int]]:
+    out = copy.deepcopy(g)
+    rows = len(g)
+    cols = len(g[0])
+    for s in range(rows + cols - 1):
+        min_r = max(0, s - cols + 1)
+        max_r = min(s, rows - 1)
+        diagonal_colors = []
+        for r in range(min_r, max_r + 1):
+            c = s - r
+            if 0 <= c < cols and out[r][c] > 0:
+                diagonal_colors.append(out[r][c])
+        if diagonal_colors:
+            max_color = max(diagonal_colors)
+            for r in range(min_r, max_r + 1):
+                c = s - r
+                if 0 <= c < cols and out[r][c] == 1:
+                    out[r][c] = max_color
+    return out
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    return propagate_max_color_along_antidiagonals(g)
+```
+
+
+============================================================
+=== Program Saved ===
+[2025-10-02 12:38:39] Python program saved to: logs/80a900e0/20251002_122656/generated_program_123839.py
+
+
+============================================================
+=== Execution Start ===
+[2025-10-02 12:38:39] Executing on input grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-02 12:38:39] Generated output grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 8, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+
+============================================================
+=== Training 0 Comparison ===
+[2025-10-02 12:38:39] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-02 12:38:39] Executing on input grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-02 12:38:39] Generated output grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 2, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+
+============================================================
+=== Training 1 Comparison ===
+[2025-10-02 12:38:39] Matches expected: False
+
+
+============================================================
+=== Execution Start ===
+[2025-10-02 12:38:39] Executing on input grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 6, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 9, 0, 6, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 9, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 6, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 6, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 7, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 7, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 7, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 6, 0, 2, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 6, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+
+
+============================================================
+=== Execution Success ===
+[2025-10-02 12:38:39] Generated output grid:
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 4, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0]
+[1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6]
+[0, 1, 0, 2, 0, 6, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0]
+[1, 0, 2, 0, 9, 0, 6, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6]
+[0, 2, 0, 9, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0]
+[2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6]
+[0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0]
+[9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0, 7]
+[0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0, 7, 0]
+[9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 6, 0, 6, 0, 7, 0, 1]
+[0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 3, 0, 6, 0, 7, 0, 1, 0]
+[9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 6, 0, 3, 0, 7, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 3, 0, 3, 0, 7, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 3, 0, 7, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 2, 0, 6, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 2, 0, 6, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 6, 0, 2, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 6, 0, 6, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+
+
+============================================================
+=== Execution Summary ===
+[2025-10-02 12:38:39] All training matches: False
+Test matches: False
+
+
+============================================================
+=== Stage DSL Extrapolate) ===
+[2025-10-02 12:38:39] Prompt:
+We are working on a visual puzzle. Your task is to summarize the last submission, talk about what worked, and what didn't in an effort to find the correct solution.
+
+You previously generated the following program which generated the following outputs:
+Program:
+```python
+from typing import List
+import copy
+
+def propagate_max_color_along_antidiagonals(g: List[List[int]]) -> List[List[int]]:
+    out = copy.deepcopy(g)
+    rows = len(g)
+    cols = len(g[0])
+    for s in range(rows + cols - 1):
+        min_r = max(0, s - cols + 1)
+        max_r = min(s, rows - 1)
+        diagonal_colors = []
+        for r in range(min_r, max_r + 1):
+            c = s - r
+            if 0 <= c < cols and out[r][c] > 0:
+                diagonal_colors.append(out[r][c])
+        if diagonal_colors:
+            max_color = max(diagonal_colors)
+            for r in range(min_r, max_r + 1):
+                c = s - r
+                if 0 <= c < cols and out[r][c] == 1:
+                    out[r][c] = max_color
+    return out
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    return propagate_max_color_along_antidiagonals(g)
+```
+
+Training example 1 result: INCORRECT
+Generated:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 8, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 8, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+Expected:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Training example 2 result: INCORRECT
+Generated:
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 2, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 2, 0, 4, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[2, 0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+Expected:
+[1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 4, 0, 4, 0, 3, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2]
+
+Test input generated output:
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 4, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0]
+[1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6]
+[0, 1, 0, 2, 0, 6, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0]
+[1, 0, 2, 0, 9, 0, 6, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6]
+[0, 2, 0, 9, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0]
+[2, 0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6]
+[0, 9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0]
+[9, 0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0, 7]
+[0, 9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 6, 0, 7, 0]
+[9, 0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 6, 0, 6, 0, 7, 0, 1]
+[0, 9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 3, 0, 6, 0, 7, 0, 1, 0]
+[9, 0, 1, 0, 1, 0, 1, 0, 6, 0, 3, 0, 6, 0, 3, 0, 7, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 3, 0, 3, 0, 7, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 6, 0, 6, 0, 6, 0, 3, 0, 7, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 2, 0, 6, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 2, 0, 6, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 6, 0, 2, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 6, 0, 6, 0, 2, 0, 6, 0, 7, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+    **Think** about the correct output for the test input. Mentally run the puzzle rules and considerations over the test input grid and think about what the output should be and if the generated output matches. If it does not match, think about how best to update the program to handle the test input.
+    
+
+YOUR TASK: summarize the above attempts, summarize what worked, and what did not work. Summarize the problem as you understand it. Call out the high level puzzle rules as well as subtle elements of the puzzle that are easy to miss. Include all considerations across all attempts. Include helpful functions from attempts, such as functions to extract objects. 
+
+IMPORTANT: Be specific and list the observe effects (what was generated) and how they are different from what you expected. It's okay to say you don't know why something is different, but make sure to note that it IS different.
+
+You can include unhelpful functions, so that we don't use them in future attempts. Make sure to make it clear when a function is either broken or not helpful to the problem.
+
+IMPORTANT: look at the generated test outputs. The generated test outputs are the MOST IMPORTANT. Do the test outputs make sense? Do they look correct? If they do not look correct, explain why they are not correct.
+
+IMPORTANT: grade this attempt at the end. You must match the grading format EXACTLY: "MARK ATTEMPT GRADE: 10/10". 
+
+Grading is always out of 10. A perfect score means that the training samples all passed and the test makes sense. A 0/10 should be a complete lack of understanding of the problem. Grade harshly, if the problem understanding is not demonstrated, give a low or 0 score. If the problem is partially understood (only some elements are understood), still give a lower score around 3/10. Only give a score above 5/10 if core elements are understood OR some training samples pass. Only give a high score (above 7/10) if core principles are demonstrated AND some training samples pass.
+
+OUTPUT FORMAT: Below is an example of what you should output. Make sure to include every section. Follow this format exactly.
+
+============= EXAMPLE OUTPUT =============
+**High level:** this is a puzzle that... (one-two sentences)
+
+**Details, subtleties, key considerations:**
+ * Omit objects that...
+ * Make sure you match....
+ * And so on...
+
+**Helpful functions, types, and tools:**
+```python
+class PuzzleElement:
+    def __init__(self):
+        self.hole_count = ...
+```
+
+```python
+def extract_objects(g: List[List[int]]) -> PuzzleElement:
+    return ...
+```
+
+**Previous attempts:**
+ * Missed ommission of objects with hole count not in key
+ * Consider problems where key component does not stretch across the entire grid
+ * Missed X
+ * extract_objects is essential for Y
+ * Train 1 omitted the devider bar
+ * Train 1 mismatches blob shape for unkown reason (it's okay to say it's unknown)
+ * Function `extract_objects` is incorrect or not relevant to the puzzle (don't use it in the future)
+
+**Test output:**
+ * The test output does not look correct in any attempt
+ * The test output is missing X and Y
+ * Make sure to account for keys with ... to handle test case
+
+ MARK ATTEMPT GRADE: X/10
+
+
+[2025-10-02 12:39:27] Response:
+**High level:** This is a visual puzzle involving a grid where initial seed values (numbers greater than 1) represent colors or labels that need to be propagated along antidiagonals to fill specific empty or placeholder cells (likely marked as 1), using a maximum-value rule to determine the fill color for each antidiagonal, but only under certain conditions or directions that preserve specific patterns in the expected outputs.
+
+**Details, subtleties, key considerations:**
+ * The grid appears to use 0 as empty/unfilled cells, 1 as placeholders to be filled with propagated colors, and higher numbers (e.g., 3, 8, 9) as seed colors that influence filling.
+ * Propagation occurs strictly along antidiagonals (cells where row + col = constant, processed in order of increasing sum s from 0 to rows + cols - 2), but the current implementation over-propagates the max color to all 1s on the diagonal without considering directionality (e.g., forward vs. backward), multiple passes, or constraints like not overwriting existing >1 values or only filling in "gaps" between seeds.
+ * Subtle elements: Expected outputs show asymmetric or selective filling (e.g., in train 1, some 1s remain 1 while nearby get 8; in train 2, colors like 2 and 4 propagate in clusters but not uniformly across the entire diagonal). Easy to miss: Propagation might need to respect the order of processing (top-to-bottom-left or similar), avoid filling isolated 1s without a nearby seed, or use min/max only from "active" seeds on the diagonal (e.g., ignoring distant ones if blocked by 0s).
+ * The grid often has a near-checkerboard pattern of 1s and 0s in unfilled areas, suggesting the puzzle preserves alternation but overlays propagated colors on 1 positions.
+ * Multiple iterations may be needed if propagation creates new seeds that affect later diagonals, but the current single-pass approach doesn't handle this.
+ * Colors seem to "bleed" from seeds outward along the diagonal but stop at edges or other seeds, creating banded or clustered patterns in expectations.
+ * All attempts so far assume global max per diagonal, but expectations show local maxes or segmented propagation (e.g., train 1 row 11 expected has 8 in col 3 but 3s elsewhere on same diagonal).
+
+**Helpful functions, types, and tools:**
+The current attempt's function is a starting point for antidiagonal processing but is broken (over-propagates uniformly; doesn't handle segmentation or direction). It could be adapted with modifications like checking for contiguous segments or directional max (e.g., from nearest seed).
+
+```python
+from typing import List
+import copy
+
+def propagate_max_color_along_antidiagonals(g: List[List[int]]) -> List[List[int]]:
+    out = copy.deepcopy(g)
+    rows = len(g)
+    cols = len(g[0])
+    for s in range(rows + cols - 1):
+        min_r = max(0, s - cols + 1)
+        max_r = min(s, rows - 1)
+        diagonal_colors = []
+        for r in range(min_r, max_r + 1):
+            c = s - r
+            if 0 <= c < cols and out[r][c] > 0:
+                diagonal_colors.append(out[r][c])
+        if diagonal_colors:
+            max_color = max(diagonal_colors)
+            for r in range(min_r, max_r + 1):
+                c = s - r
+                if 0 <= c < cols and out[r][c] == 1:
+                    out[r][c] = max_color
+    return out
+```
+(This is the attempted function; it's helpful for extracting/processing diagonals but incorrect for filling—future attempts should add segmentation, e.g., by finding contiguous 1-runs between seeds and filling locally.)
+
+No other helpful functions from attempts (e.g., no object extraction like blobs or regions was used, which might be irrelevant here as the puzzle seems diagonal-line based rather than blob-based).
+
+**Previous attempts:**
+ * This is the only attempt provided, which failed both training examples completely.
+ * In train 1, the generated output incorrectly propagates 8 too aggressively (e.g., row 3 col 13: generated 8 vs. expected 1; row 4 col 12: generated 8 vs. expected 1; row 5 col 13: generated 8 vs. expected 8 but mismatches nearby like row 6 col 12: generated 1 vs. expected 1—wait, some match but overall pattern wrong, e.g., row 11 col 6: generated 3 vs. expected 1; row 14 col 3: generated 8 vs. expected 1). Also, row 10 col 6: generated 8 vs. expected 1. Differences suggest uniform max ignores local segments or overwrites where it shouldn't.
+ * In train 2, generated creates symmetric bands of 4s and 2s filling almost all 1s (e.g., row 0 col 12-18: all 4s/2s vs. expected sparse 1s and 4s like row 0 col 14: expected 4 but col 12: expected 1 vs. generated 2), but expected has irregular clusters (e.g., row 6 col 8: expected 3 vs. generated 3—some matches, but row 7 col 7: expected 4 vs. generated 4, yet row 11 col 10: expected 1 vs. generated 2). The generated is too uniform, missing sparse placements.
+ * No extraction functions were used, but they might not help (e.g., blob detection would be unhelpful/irrelevant as propagation is linear along diagonals, not area-based).
+ * The antidiagonal loop is essential but needs refinement for direction (e.g., propagate from seeds outward only) to avoid global max issues.
+ * Unknown reasons for some mismatches (e.g., why train 1 row 14 col 1: generated 8 vs. expected 8 matches, but adjacent row 14 col 3: 8 vs. 1 doesn't—possibly needs to skip non-contiguous 1s).
+
+**Test output:**
+ * The generated test output does not look correct, as it follows the same flawed uniform max-propagation as the training failures, creating large bands of 9s and 6s that fill most 1s (e.g., rows 7-10 heavily 9-filled, row 12 col 11: 3 appears oddly without clear seed propagation). This overfills compared to training expectations, which keep many 1s sparse/unfilled. For example, mentally simulating rules: assuming local max from nearest seed along antidiagonal segments, row 2 col 7 should likely stay low (near 1s) not jump to 4; row 12 col 6: generated 3 but probably should propagate from nearby 1s/6s differently, not introducing isolated 3 without a seed. The output ignores potential segmentation (e.g., 0s might block propagation), leading to incorrect bleeding of high values like 9 across full diagonals. It doesn't make sense for a puzzle emphasizing clustered, non-uniform fills seen in expectations.
+
+MARK ATTEMPT GRADE: 2/10
+
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-02 12:39:27] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 14x20
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Training Example 1 - Output
+Size: 14x20
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8]
+[1, 0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0]
+[0, 1, 0, 1, 0, 1, 0, 8, 0, 1, 0, 8, 0, 1]
+[1, 0, 1, 0, 1, 0, 3, 0, 8, 0, 8, 0, 1, 0]
+[0, 1, 0, 1, 0, 3, 0, 3, 0, 8, 0, 1, 0, 1]
+[1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 3, 0, 3, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 8, 0, 3, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Colors present:
+  1 = blue
+  3 = green
+  8 = maroon
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 30x24
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 4, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+Training Example 2 - Output
+Size: 30x24
+[1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 4, 0, 3, 0, 3, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 4, 0, 4, 0, 3, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[0, 1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1]
+[1, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0]
+[0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1]
+[4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2, 0]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 1, 0, 2]
+
+Colors present:
+  1 = blue
+  2 = red
+  3 = green
+  4 = yellow
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 21x22
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 2, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 6, 0, 6, 0, 4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 6, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 9, 0, 6, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 9, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 9, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 6, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 6, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 6, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 1, 0, 3, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 7, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 7, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 7, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+[1, 0, 6, 0, 2, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+[0, 1, 0, 6, 0, 2, 0, 6, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+

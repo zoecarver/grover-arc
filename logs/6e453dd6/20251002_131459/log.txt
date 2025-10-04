@@ -1,0 +1,203 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-02 13:14:59] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 16x16
+[0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 6, 0, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 0, 0, 0, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 0, 6, 0, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 0, 6, 0, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 0, 6, 0, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 0, 0, 0, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+
+Training Example 1 - Output
+Size: 16x16
+[6, 6, 6, 6, 6, 0, 0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 6, 0, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+
+Colors present:
+  2 = red
+  5 = orange
+  6 = pink
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 10x16
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 6, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 0, 6, 5, 6, 6, 6, 6]
+[6, 0, 6, 0, 6, 5, 6, 6, 6, 6]
+[6, 0, 0, 0, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 6, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 6, 0, 6, 6, 5, 6, 6, 6, 6]
+[0, 0, 0, 6, 6, 5, 6, 6, 6, 6]
+
+Training Example 2 - Output
+Size: 10x16
+[6, 0, 0, 0, 6, 5, 6, 6, 6, 6]
+[6, 0, 6, 0, 6, 5, 6, 6, 6, 6]
+[6, 0, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 0, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 6, 6, 6, 5, 6, 6, 6, 6]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+[6, 6, 0, 6, 0, 5, 2, 2, 2, 2]
+[6, 6, 0, 0, 0, 5, 6, 6, 6, 6]
+
+Colors present:
+  2 = red
+  5 = orange
+  6 = pink
+--------------------------------------------------------------------------------
+
+Training Example 3 - Input
+Size: 10x20
+[6, 0, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 0, 6, 6, 6, 0, 6, 5, 6, 6]
+[6, 0, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 6, 0, 6, 6, 0, 6, 5, 6, 6]
+[6, 6, 0, 6, 6, 0, 6, 5, 6, 6]
+[6, 6, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 6, 6, 0, 0, 6, 5, 6, 6]
+[6, 6, 6, 6, 0, 0, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 0, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 0, 6, 0, 6, 0, 6, 5, 6, 6]
+[6, 0, 0, 0, 0, 0, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 0, 0, 0, 0, 6, 6, 5, 6, 6]
+[6, 0, 6, 6, 0, 6, 6, 5, 6, 6]
+[6, 0, 0, 0, 0, 6, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+
+Training Example 3 - Output
+Size: 10x20
+[6, 6, 0, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 0, 6, 6, 6, 0, 5, 2, 2]
+[6, 6, 0, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 6, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 0, 6, 6, 0, 5, 2, 2]
+[6, 6, 6, 0, 6, 6, 0, 5, 2, 2]
+[6, 6, 6, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 0, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 0, 6, 0, 6, 0, 5, 2, 2]
+[6, 6, 0, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+[6, 6, 6, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 0, 6, 6, 0, 5, 2, 2]
+[6, 6, 6, 0, 0, 0, 0, 5, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 5, 6, 6]
+
+Colors present:
+  2 = red
+  5 = orange
+  6 = pink
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 12x25
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 0, 0, 0, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 6, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 0, 0, 0, 0, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 0, 0, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 0, 0, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 0, 0, 0, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 0, 6, 6, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 0, 0, 0, 0, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 0, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 6, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[0, 0, 0, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 6, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 0, 0, 0, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 6, 0, 5, 6, 6, 6]
+[6, 6, 6, 6, 6, 0, 0, 0, 5, 6, 6, 6]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+

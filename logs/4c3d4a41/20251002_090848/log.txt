@@ -1,0 +1,118 @@
+
+============================================================
+=== Stage Python Generator With Feedback) ===
+[2025-10-02 09:08:49] Prompt:
+You are trying to build a program to solve this puzzle. The puzzle is presented as a set of inputs and outputs. Your job is to 1) infer the rules of the puzzle and how to generate the correct output for any given input based on these pairs and 2) a program that represents these rules and can be applied to any of the train or test inputs.
+
+Here is a summary of previous attempts:
+
+
+Unlike the training pairs, there is no test output to compare against, so THINK about if the generated output above makes sense and looks valid. If the test output does not look valid, make sure to update the program, specifying how to produce the correct test output.
+
+Based on this feedback, refine your program. Think about what worked and what didn't, then output an NEW and IMPROVED program. You will get many attempts to generate programs, so try NEW approaches, different from the previously generated programs. Be creative. Try out of the box approaches. Test things that you think might work.
+
+
+Training Example 1 - Input
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 2, 0, 5, 0, 5, 0, 5]
+[0, 5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 3, 0, 2, 0, 4, 0, 7, 0, 5]
+[0, 5, 0, 5, 0, 0, 0, 5, 0, 5, 0, 3, 0, 2, 0, 4, 0, 7, 0, 5]
+[0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 5]
+[0, 5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+Training Example 1 - Output
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 2, 0, 4, 0, 7, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 2, 0, 4, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 4, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+Colors present:
+  2 = red
+  3 = green
+  4 = yellow
+  5 = orange
+  7 = dark red
+--------------------------------------------------------------------------------
+
+Training Example 2 - Input
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 4, 0, 5, 0, 5, 0, 8, 0, 5]
+[0, 5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 4, 0, 6, 0, 7, 0, 8, 0, 5]
+[0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 6, 0, 7, 0, 0, 0, 5]
+[0, 5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+Training Example 2 - Output
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 4, 0, 5, 0, 5, 0, 8, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 4, 0, 6, 0, 7, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 6, 0, 7, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+Colors present:
+  4 = yellow
+  5 = orange
+  6 = pink
+  7 = dark red
+  8 = maroon
+--------------------------------------------------------------------------------
+
+Test Example 1 - Input
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 8, 0, 5]
+[0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 8, 0, 5]
+[0, 5, 0, 5, 0, 5, 0, 0, 0, 5, 0, 9, 0, 6, 0, 3, 0, 8, 0, 5]
+[0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 6, 0, 3, 0, 0, 0, 5]
+[0, 5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+--------------------------------------------------------------------------------
+
+Test Example 2 - Input
+Size: 20x8
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 2, 0, 5, 0, 5, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 2, 0, 4, 0, 7, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 2, 0, 4, 0, 7, 0, 5]
+[0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 5]
+[0, 5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+--------------------------------------------------------------------------------
+
+
+
+
+
+Output a python program to solve this puzzle. Avoid nested loops and nested control flow. Create one function per transformation, rule, or observation. Make sure each function is self contained. Do not output a monolithic program, instead output a program that composes individual rules. Make sure each function clearly describes what observation or rule it is handling.
+
+REQUIRED OUTPUT:
+* Define **exactly**: `def program(g: List[List[int]]) -> List[List[int]]:`
+* Use only the standard library. **No I/O**, no `__main__`, no demo code.
+* Output the program as text.
+
+Other considerations:
+* A sample of inputs and outputs is provided in a pretty printed format.
+* This is every input that the program will be run on. 
+* IMPORTANT: pay special attention to the TEST input, this is the only one that will be scored. The train inputs are just for reference.
+
+
+IMPORTANT: only output the program, do not output anything else, do not output any reasoning or explanation.
+
+

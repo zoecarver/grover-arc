@@ -15,7 +15,7 @@ import numpy as np
 import re
 
 from gpt5_prompt import prompt_with_images, prompt_with_reasoning
-from dsl_executor import execute_dsl_on_problem, ProblemExecutionResult, format_grid
+from dsl_executor import execute_dsl_on_problem, ProblemExecutionResult, format_grid, log_execution_step
 from normalize_colors import get_normalized_problem_text
 
 from util import (
@@ -85,10 +85,10 @@ def extract_grade(attempt: str) -> int:
     return int(match.group(1)) if match else 0
 
 
-def remove_low_scoring_attempts(prev_attempts: List[str], max_removals: int = 10) -> List[str]:
-    """Remove lowest scoring attempts (grade < 6/10), up to max_removals."""
+def remove_low_scoring_attempts(log_dir: str, prev_attempts: List[str], max_removals: int = 8) -> List[str]:
+    """Remove lowest scoring attempts (grade < 5/10), up to max_removals."""
     attempts_with_grades = [(attempt, extract_grade(attempt)) for attempt in prev_attempts]
-    low_scoring = [(attempt, grade) for attempt, grade in attempts_with_grades if grade < 6]
+    low_scoring = [(attempt, grade) for attempt, grade in attempts_with_grades if grade < 5]
     low_scoring.sort(key=lambda x: x[1])  # Sort by grade ascending (lowest first)
 
     attempts_to_remove = [attempt for attempt, _ in low_scoring[:max_removals]]  # Take up to max_removals
@@ -96,6 +96,10 @@ def remove_low_scoring_attempts(prev_attempts: List[str], max_removals: int = 10
 
     if attempts_to_remove:
         print(f"[MARK REMOVE LOW SCORING] Removed {len(attempts_to_remove)} low-scoring attempts (grade < 6/10)")
+        log_execution_step(
+            log_dir, "[MARK REMOVE LOW SCORING]", 
+            f"Removed {len(attempts_to_remove)} low-scoring attempts (grade < 6/10)"
+        )
 
     return filtered_attempts
 
@@ -199,7 +203,7 @@ def solve_problem(problem_path: str) -> str:
     for iteration in range(num_iterations):
         if iteration == num_iterations - 1:
             # Remove lowest scoring attempts before final iteration
-            prev_attempts = remove_low_scoring_attempts(prev_attempts)
+            prev_attempts = remove_low_scoring_attempts(log_dir, prev_attempts)
 
         print("=" * 80)
         print(f"MAIN SOLVE RUN {iteration + 1} - STARTING")

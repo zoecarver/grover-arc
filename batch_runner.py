@@ -13,6 +13,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Tuple, Optional
 import time
+import random
 
 def run_single_problem(problem_path: str, worker_id: int) -> Tuple[str, bool, str]:
     """
@@ -29,7 +30,7 @@ def run_single_problem(problem_path: str, worker_id: int) -> Tuple[str, bool, st
             ['python3', 'solver.py', problem_path],
             capture_output=True,
             text=True,
-            timeout=12000  # 200 minute timeout per problem
+            timeout=24000  # 400 minute timeout per problem
         )
         
         elapsed = time.time() - start_time
@@ -52,7 +53,7 @@ def run_single_problem(problem_path: str, worker_id: int) -> Tuple[str, bool, st
         return (problem_path, success, message)
         
     except subprocess.TimeoutExpired:
-        message = "TIMEOUT (>200min)"
+        message = "TIMEOUT (>400min)"
         print(f"[Worker {worker_id}] Timeout {problem_name}: {message}")
         return (problem_path, False, message)
         
@@ -155,11 +156,20 @@ def main():
         sys.exit(1)
     
     print(f"Selected {len(problem_paths)} problems")
+
+    # Shuffle the problem paths
+    random.shuffle(problem_paths)
+    print("Shuffled problem order")
+
+    # Print comma-separated list of problem hashes
+    problem_hashes = [Path(p).stem for p in problem_paths]
+    print(f"Order: {', '.join(problem_hashes)}")
+
     print(f"Using {args.workers} parallel workers")
     print("\n" + "="*60)
     print("STARTING BATCH RUN")
     print("="*60 + "\n")
-    
+
     # Run problems in parallel
     results = []
     start_time = time.time()
