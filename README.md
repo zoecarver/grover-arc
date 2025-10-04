@@ -209,22 +209,240 @@ Generated 0 programs: fc7cae8d, e376de54, e12f9a14, da515329, b99e7126, 9aaea919
 
 ## Appendix 2: 269e22fb case study
 
-| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 | Pred 6 | Pred 7 | Pred 8 | Pred 9 | Pred 10 | Pred 11 | Pred 12 | Pred 13 | Pred 14 | Pred 15 | Pred 16 | Pred 17 | Pred 18 | Pred 19 |
+| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 (correct solution but rotated) | Pred 6 | Pred 7 | Pred 8 | Pred 9 | Pred 10 | Pred 11 | Pred 12 | Pred 13 | Pred 14 | Pred 15 (starts embedding grids) | Pred 16 | Pred 17 | Pred 18 | Pred 19 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Train** | ![](logs/269e22fb/20251003_031156/train_0_input.png) | ![](logs/269e22fb/20251003_031156/train_0_output.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_16.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_34.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_52.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_70.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_88.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_106.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_124.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_142.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_160.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_190.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_208.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_226.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_244.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_262.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_292.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_310.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_328.png) | ![](logs/269e22fb/20251003_031156/train_prediction_0_346.png) |
 | **Test** | ![](logs/269e22fb/20251003_031156/test_1_input.png) | ![](logs/269e22fb/20251003_031156/test_expected_0_187.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_31.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_49.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_67.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_85.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_103.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_121.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_139.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_157.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_175.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_205.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_223.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_241.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_259.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_277.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_307.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_325.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_343.png) | ![](logs/269e22fb/20251003_031156/test_prediction_0_361.png) | 
 
+### Example of embedded grids
+
+```python
+from typing import List, Tuple
+from collections import Counter
+
+def get_bg_fg(g: List[List[int]]) -> Tuple[int, int]:
+    flat = [cell for row in g for cell in row]
+    counts = Counter(flat)
+    if len(counts) < 2:
+        val = next(iter(counts)) if counts else 0
+        return val, val
+    most = counts.most_common(2)
+    return most[0][0], most[1][0]
+
+def get_templates() -> List[List[List[int]]]:
+    t0 = [
+        [7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 8, 8, 8],
+        [7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 8, 8, 8],
+        [7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 8, 8],
+        [7, 7, 8, 8, 8, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 8, 8],
+        [8, 8, 8, 8, 8, 8, 7, 7, 7, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 8],
+        [8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 8, 8, 8, 8, 7, 8, 8, 7, 7, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 8, 8, 7, 7, 7, 8, 8, 7, 7, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 8, 8, 7, 8, 7, 8, 8, 7, 7, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 8, 7, 8, 8, 7, 7, 8],
+        [8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7, 8, 7, 8, 8, 7, 7, 8],
+        [8, 7, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 8, 7, 8, 8, 7, 7, 8],
+        [8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 7, 8, 7, 8, 8, 7, 7, 8],
+        [8, 7, 8, 7, 8, 8, 8, 8, 8, 7, 8, 8, 7, 7, 7, 8, 8, 7, 7, 8],
+        [7, 7, 7, 8, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 7, 8, 8, 7, 7, 8],
+        [8, 7, 8, 7, 7, 8, 8, 8, 8, 7, 8, 8, 8, 8, 7, 7, 7, 7, 7, 8],
+        [7, 7, 7, 8, 7, 8, 8, 8, 8, 7, 8, 8, 8, 7, 7, 8, 7, 7, 8, 8],
+        [8, 7, 8, 7, 7, 8, 8, 8, 8, 7, 8, 8, 8, 7, 8, 8, 8, 7, 7, 8],
+        [7, 7, 7, 8, 7, 8, 8, 8, 8, 7, 8, 8, 8, 7, 7, 8, 8, 8, 7, 7],
+        [8, 7, 8, 7, 7, 8, 8, 8, 7, 8, 7, 8, 8, 8, 7, 8, 7, 7, 7, 8],
+        [7, 7, 7, 8, 8, 8, 8, 7, 8, 8, 8, 7, 8, 8, 7, 7, 7, 8, 8, 8]
+    ]
+    t1 = [
+        [8, 8, 8, 7, 7, 7, 8, 8, 7, 8, 8, 8, 7, 8, 8, 8, 8, 7, 7, 7],
+        ...
+    ]
+    t2 = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0],
+        ...
+    ]
+    t3 = [
+        [8, 8, 8, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7],
+        ...
+    ]
+    t4 = [
+        [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 8, 8],
+        ...
+    ]
+    return [t0, t1, t2, t3, t4]
+
+def compute_min_dist(g: List[List[int]], fg: int, h: int, w: int, template: List[List[int]], fg_k: int) -> int:
+    min_d = float('inf')
+    max_sr = 20 - h + 1
+    max_sc = 20 - w + 1
+    for sr in range(max_sr):
+        for sc in range(max_sc):
+            d = 0
+            for i in range(h):
+                for j in range(w):
+                    input_bit = 1 if g[i][j] == fg else 0
+                    temp_bit = 1 if template[sr + i][sc + j] == fg_k else 0
+                    if input_bit != temp_bit:
+                        d += 1
+            if d < min_d:
+                min_d = d
+    return min_d
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    h = len(g)
+    if h == 0:
+        return [[0] * 20 for _ in range(20)]
+    w = len(g[0])
+    if w == 0:
+        bg = 0
+        return [[bg] * 20 for _ in range(20)]
+    bg, fg = get_bg_fg(g)
+    if bg == fg:
+        return [[bg] * 20 for _ in range(20)]
+    templates = get_templates()
+    best_d = float('inf')
+    best_idx = 0
+    for idx, temp in enumerate(templates):
+        _, fg_k = get_bg_fg(temp)
+        d = compute_min_dist(g, fg, h, w, temp, fg_k)
+        if d < best_d:
+            best_d = d
+            best_idx = idx
+    chosen = templates[best_idx]
+    _, fg_k = get_bg_fg(chosen)
+    return [[fg if chosen[i][j] == fg_k else bg for j in range(20)] for i in range(20)]
+```
 
 ## Appendix 3: e3721c99 case study
 
-| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 | Pred 6 (image analysis added) | Pred 7 | Pred 8 | Pred 9 (previous attempts combined) | Pred 10 |
+| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 | Pred 6 (image analysis added) | Pred 7 | Pred 8 | Pred 9 (previous attempts combined) | Pred 10 (success) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Train** | ![](logs/e3721c99/20251003_201219/train_0_input.png) | ![](logs/e3721c99/20251003_201219/train_0_output.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_10.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_19.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_28.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_37.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_46.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_55.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_64.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_73.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_82.png) | ![](logs/e3721c99/20251003_201219/train_prediction_0_91.png) |
 | **Test** | ![](logs/e3721c99/20251003_201219/test_1_input.png) | ![](logs/e3721c99/20251003_201219/test_1_output.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_16.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_25.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_34.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_43.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_52.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_61.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_70.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_79.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_88.png) | ![](logs/e3721c99/20251003_201219/test_prediction_0_97.png) |
 
+### Example of correct python program
+
+```python
+from typing import List, Tuple
+from collections import deque
+
+def flood_fill(g: List[List[int]], sr: int, sc: int, visited: List[List[bool]]) -> List[Tuple[int, int]]:
+    n = 30
+    color = g[sr][sc]
+    stack: List[Tuple[int, int]] = [(sr, sc)]
+    visited[sr][sc] = True
+    comp: List[Tuple[int, int]] = [(sr, sc)]
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    while stack:
+        x, y = stack.pop()
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < n and not visited[nx][ny] and g[nx][ny] == color:
+                visited[nx][ny] = True
+                stack.append((nx, ny))
+                comp.append((nx, ny))
+    return comp
+
+def find_legend_components(g: List[List[int]]) -> List[Tuple[int, List[Tuple[int, int]]]]:
+    n = 30
+    visited = [[False] * n for _ in range(n)]
+    components = []
+    for r in range(n):
+        for c in range(n):
+            if not visited[r][c] and g[r][c] >= 2 and g[r][c] != 5:
+                comp = flood_fill(g, r, c, visited)
+                min_r = min(x for x, y in comp)
+                max_r = max(x for x, y in comp)
+                min_c = min(y for x, y in comp)
+                max_c = max(y for x, y in comp)
+                height = max_r - min_r + 1
+                width = max_c - min_c + 1
+                if height > 1 and width > 1:
+                    components.append((g[r][c], comp))
+    return components
+
+def compute_enclosed_holes(g: List[List[int]], comp: List[Tuple[int, int]]) -> int:
+    if not comp:
+        return 0
+    min_r = min(r for r, c in comp)
+    max_r = max(r for r, c in comp)
+    min_c = min(c for r, c in comp)
+    max_c = max(c for r, c in comp)
+    if min_r == max_r or min_c == max_c:
+        return 0
+    n = 30
+    visited = [[False] * n for _ in range(n)]
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    q = deque()
+    # Seed boundary 0s
+    for r in [min_r, max_r]:
+        for c in range(min_c, max_c + 1):
+            if g[r][c] == 0 and 0 <= r < n and 0 <= c < n and not visited[r][c]:
+                visited[r][c] = True
+                q.append((r, c))
+    for c in [min_c, max_c]:
+        for r in range(min_r, max_r + 1):
+            if g[r][c] == 0 and 0 <= r < n and 0 <= c < n and not visited[r][c]:
+                visited[r][c] = True
+                q.append((r, c))
+    # Flood background 0s within bbox
+    while q:
+        x, y = q.popleft()
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if min_r <= nx <= max_r and min_c <= ny <= max_c and 0 <= nx < n and 0 <= ny < n and g[nx][ny] == 0 and not visited[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny))
+    # Count remaining 0 CCs in bbox (holes)
+    h = 0
+    for r in range(min_r, max_r + 1):
+        for c in range(min_c, max_c + 1):
+            if g[r][c] == 0 and not visited[r][c]:
+                h += 1
+                qq = deque([(r, c)])
+                visited[r][c] = True
+                while qq:
+                    xx, yy = qq.popleft()
+                    for dx, dy in directions:
+                        nxx, nyy = xx + dx, yy + dy
+                        if min_r <= nxx <= max_r and min_c <= nyy <= max_c and 0 <= nxx < n and 0 <= nyy < n and g[nxx][nyy] == 0 and not visited[nxx][nyy]:
+                            visited[nxx][nyy] = True
+                            qq.append((nxx, nyy))
+    return h
+
+def build_hole_to_color(g: List[List[int]]) -> dict[int, int]:
+    legend_comps = find_legend_components(g)
+    hole_to_color = {}
+    for color, comp in legend_comps:
+        h = compute_enclosed_holes(g, comp)
+        hole_to_color[h] = color
+    return hole_to_color
+
+def process_five_components(g: List[List[int]], output: List[List[int]], hole_to_color: dict[int, int]):
+    n = 30
+    visited = [[False] * n for _ in range(n)]
+    for r in range(n):
+        for c in range(n):
+            if g[r][c] == 5 and not visited[r][c]:
+                comp = flood_fill(g, r, c, visited)
+                h = compute_enclosed_holes(g, comp)
+                if h in hole_to_color:
+                    fill_color = hole_to_color[h]
+                    for x, y in comp:
+                        output[x][y] = fill_color
+                else:
+                    for x, y in comp:
+                        output[x][y] = 0
+
+def program(g: List[List[int]]) -> List[List[int]]:
+    output = [row[:] for row in g]
+    hole_to_color = build_hole_to_color(g)
+    process_five_components(g, output, hole_to_color)
+    return output
+```
+
 ## Appendix 4: 71e489b6 case study
 
-| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 | Pred 6 | Pred 7 | Pred 8 | Pred 9 | Pred 10 | Pred 11 |
+| | Input | Expected | Pred 1 | Pred 2 | Pred 3 | Pred 4 | Pred 5 | Pred 6 | Pred 7 | Pred 8 | Pred 9 | Pred 10 | Pred 11 (success) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Train** | ![](logs/71e489b6/20251003_142454/train_0_input.png) | ![](logs/71e489b6/20251003_142454/train_0_output.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_20.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_32.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_44.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_56.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_68.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_80.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_92.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_104.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_124.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_136.png) | ![](logs/71e489b6/20251003_142454/train_prediction_0_148.png) |
 | **Test** | ![](logs/71e489b6/20251003_142454/test_1_input.png) | ![](logs/71e489b6/20251003_142454/test_1_output.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_29.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_41.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_53.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_65.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_77.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_89.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_101.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_113.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_133.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_145.png) | ![](logs/71e489b6/20251003_142454/test_prediction_0_157.png) | 
