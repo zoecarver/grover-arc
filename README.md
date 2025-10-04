@@ -34,7 +34,7 @@ This seems contradictory to context rot, where too much information degrades per
 
 The inspiration for this implementations comes two fold: 1) from previous work that has demonstrated many iterations and RL-style search are successful and 2) from Grover's quantum search algorithm, specifically 3Blue1Brown's explanation of it on YouTube. 
 
-![Transformer and Quantum Computing Comparison](/Users/zoecarver/Desktop/transformer_quantum_comparison.png)
+![Transformer and Quantum Computing Comparison](img_tmp/transformer_quantum_comparison.png)
 
 Quantum computers and transformers share some structural similarities: both output probability distributions over states, both feature complete interconnectedness (quantum superposition connects all basis states through the wavefunction; self-attention connects all tokens through query-key relationships), and both use operations that redistribute probability mass (Grover's diffusion operator parallels softmax normalization in attention).
 
